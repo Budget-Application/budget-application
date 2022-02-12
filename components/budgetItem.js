@@ -1,10 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import BudgetScreen from "../screens/budgetScreen";
 
-export default function BudgetItem({ item }) {
+export default function BudgetItem({ item, navigation }) {
   const budgetPressHandler = () => {
-    console.log(item.nameb);
+    navigation.navigate("BudgetScreen", item);
   };
 
   return (
