@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList, StatusBar } from "react-native";
 import BudgetItem from "../components/budgetItem";
+import * as user from "../db/apis/user.js";
 
 const renderHeader = () => {
   return (
@@ -11,27 +12,11 @@ const renderHeader = () => {
 };
 
 export default function Home({ navigation }) {
-  const budgetData = [
-    { budget_name: "Budget_1", budget_total: "1" },
-    { budget_name: "Budget_2", budget_total: "2" },
-    { budget_name: "Budget_3", budget_total: "3" },
-    { budget_name: "Budget_4", budget_total: "4" },
-    { budget_name: "Budget_5", budget_total: "5" },
-    { budget_name: "Budget_6", budget_total: "6" },
-    { budget_name: "Budget_7", budget_total: "7" },
-    { budget_name: "Budget_8", budget_total: "8" },
-    { budget_name: "Budget_9", budget_total: "9" },
-    { budget_name: "Budget_11", budget_total: "11" },
-    { budget_name: "Budget_12", budget_total: "12" },
-    { budget_name: "Budget_13", budget_total: "13" },
-    { budget_name: "Budget_14", budget_total: "14" },
-    { budget_name: "Budget_15", budget_total: "15" },
-    { budget_name: "Budget_16", budget_total: "16" },
-    { budget_name: "Budget_17", budget_total: "17" },
-    { budget_name: "Budget_18", budget_total: "18" },
-    { budget_name: "Budget_19", budget_total: "19" },
-  ];
-
+  const [budgetData, setBudgetData] = useState([]);
+  useEffect(async () => {
+    const budgetList = await user.getUserBudgetList("testUser");
+    setBudgetData(budgetList);
+  }, []);
   return (
     <View style={style.container}>
       <FlatList

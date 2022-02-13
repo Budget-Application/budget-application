@@ -1,12 +1,4 @@
-import { async } from "@firebase/util";
-import {
-  getDoc,
-  collection,
-  addDoc,
-  setDoc,
-  doc,
-  getDocs,
-} from "firebase/firestore";
+import { getDoc, collection, doc, getDocs } from "firebase/firestore";
 import { db } from "../setup.js";
 
 // const dummyUser = {
