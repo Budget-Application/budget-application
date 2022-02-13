@@ -1,7 +1,8 @@
+import "react-native-gesture-handler";
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import CreateNavigationContainer from "./routes/homeStack";
 import {
   NunitoSans_200ExtraLight,

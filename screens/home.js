@@ -58,7 +58,7 @@ export default function Home({ navigation }) {
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight,
+    // marginTop: StatusBar.currentHeight,
     backgroundColor: "green",
   },
   headerView: {

@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import BudgetCalendar from "../components/calendarView";
+import BudgetCalendar from "../components/calenderView";
 
-export default function BudgetScreen({ route, navigation }) {
+export default function BudgetMonthView({ route, navigation }) {
   return (
     <View style={style.container}>
       <BudgetCalendar />

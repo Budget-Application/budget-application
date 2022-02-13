@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
 export default function BudgetItem({ item, navigation }) {
   const budgetPressHandler = () => {
-    navigation.navigate("BudgetScreen", item);
+    navigation.navigate("BudgetDrawer", item);
   };
 
   return (

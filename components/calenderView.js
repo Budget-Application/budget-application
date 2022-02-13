@@ -1,6 +1,5 @@
 import { Calendar } from "react-native-calendars";
 import React from "react";
-import { Text } from "react-native";
 
 export default function BudgetCalendar() {
   return (
