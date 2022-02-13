@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component, useEffect, useState } from "react";
 import { StyleSheet, View, Text, FlatList, StatusBar } from "react-native";
 import BudgetItem from "../components/budgetItem";
 
@@ -12,24 +12,24 @@ const renderHeader = () => {
 
 export default function Home({ navigation }) {
   const budgetData = [
-    { nameb: "Budget_1", amount: "1" },
-    { nameb: "Budget_2", amount: "2" },
-    { nameb: "Budget_3", amount: "3" },
-    { nameb: "Budget_4", amount: "4" },
-    { nameb: "Budget_5", amount: "5" },
-    { nameb: "Budget_6", amount: "6" },
-    { nameb: "Budget_7", amount: "7" },
-    { nameb: "Budget_8", amount: "8" },
-    { nameb: "Budget_9", amount: "9" },
-    { nameb: "Budget_11", amount: "11" },
-    { nameb: "Budget_12", amount: "12" },
-    { nameb: "Budget_13", amount: "13" },
-    { nameb: "Budget_14", amount: "14" },
-    { nameb: "Budget_15", amount: "15" },
-    { nameb: "Budget_16", amount: "16" },
-    { nameb: "Budget_17", amount: "17" },
-    { nameb: "Budget_18", amount: "18" },
-    { nameb: "Budget_19", amount: "19" },
+    { budget_name: "Budget_1", budget_total: "1" },
+    { budget_name: "Budget_2", budget_total: "2" },
+    { budget_name: "Budget_3", budget_total: "3" },
+    { budget_name: "Budget_4", budget_total: "4" },
+    { budget_name: "Budget_5", budget_total: "5" },
+    { budget_name: "Budget_6", budget_total: "6" },
+    { budget_name: "Budget_7", budget_total: "7" },
+    { budget_name: "Budget_8", budget_total: "8" },
+    { budget_name: "Budget_9", budget_total: "9" },
+    { budget_name: "Budget_11", budget_total: "11" },
+    { budget_name: "Budget_12", budget_total: "12" },
+    { budget_name: "Budget_13", budget_total: "13" },
+    { budget_name: "Budget_14", budget_total: "14" },
+    { budget_name: "Budget_15", budget_total: "15" },
+    { budget_name: "Budget_16", budget_total: "16" },
+    { budget_name: "Budget_17", budget_total: "17" },
+    { budget_name: "Budget_18", budget_total: "18" },
+    { budget_name: "Budget_19", budget_total: "19" },
   ];
 
   return (

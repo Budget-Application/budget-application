@@ -26,7 +26,7 @@ export default function CreateNavigationContainer() {
         <Stack.Screen
           name="BudgetDrawer"
           component={BudgetDrawer}
-          options={({ route }) => ({ title: route.params.nameb })}
+          options={({ route }) => ({ title: route.params.budget_name })}
         />
       </Stack.Navigator>
     </NavigationContainer>

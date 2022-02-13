@@ -9,8 +9,8 @@ export default function BudgetItem({ item, navigation }) {
   return (
     <TouchableOpacity onPress={budgetPressHandler}>
       <View style={Styles.budgetItemView}>
-        <Text style={Styles.budgetText}> {item.nameb} </Text>
-        <Text style={Styles.budgetText}> {item.amount} </Text>
+        <Text style={Styles.budgetText}> {item.budget_name} </Text>
+        <Text style={Styles.budgetText}> {item.budget_total} </Text>
       </View>
     </TouchableOpacity>
   );
