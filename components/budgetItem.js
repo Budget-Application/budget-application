@@ -9,8 +9,8 @@ export default function BudgetItem({ item, navigation }) {
   return (
     <TouchableOpacity onPress={budgetPressHandler}>
       <View style={Styles.budgetItemView}>
-        <Text style={Styles.budgetText}> {item.budget_name} </Text>
-        <Text style={Styles.budgetText}> {item.budget_total} </Text>
+        <Text numberOfLines={1} ellipsizeMode="tail" style={Styles.budgetText}> {item.budget_name} </Text>
+        <Text style={Styles.budgetAmount}> {item.budget_total} </Text>
       </View>
     </TouchableOpacity>
   );
@@ -21,11 +21,20 @@ const Styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "red",
     flexDirection: "row",
-    alignContent: "center",
+    alignItems: "center",
     justifyContent: "space-evenly",
   },
   budgetText: {
+    paddingVertical: 10,
+    flex: 0.7,
+    backgroundColor: "yellow",
+    fontSize: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  budgetAmount: {
     padding: 10,
+    flex: 0.3,
     backgroundColor: "yellow",
     fontSize: 30,
     justifyContent: "center",
