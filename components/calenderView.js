@@ -1,66 +1,193 @@
-import { Calendar } from "react-native-calendars";
-import React from "react";
+import React, { useState } from "react";
+import { StyleSheet, View, Text, Button, Pressable, Image } from "react-native";
 
-export default function BudgetCalendar() {
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const nDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+const generateMatrix = (state) => {
+  var matrix = [];
+  var year = state.activeDate.getFullYear();
+  var month = state.activeDate.getMonth();
+  var firstDay = new Date(year, month, 1).getDay();
+  var maxDays = nDays[month];
+
+  matrix[0] = weekDays;
+
+  if (month == 1) {
+    // February
+    if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+      maxDays += 1;
+    }
+  }
+
+  var counter = 1;
+
+  for (let row = 1; row < 7; row++) {
+    matrix[row] = [];
+    for (let col = 0; col < 7; col++) {
+      matrix[row][col] = -1;
+      if (row == 1 && col >= firstDay) {
+        // Fill in rows only after the first day of the month
+        matrix[row][col] = counter++;
+      } else if (row > 1 && counter <= maxDays) {
+        // Fill in rows only if the counter's not greater than
+        // the number of days in the month
+        matrix[row][col] = counter++;
+      }
+    }
+  }
+  return matrix;
+};
+
+export default function BudgetCalendar({ state, setState, navigation }) {
+  const [amount, setAmount] = useState(100);
+  var matrix = generateMatrix(state);
+
+  const getCompletDate = (activeDate) => {
+    var date = activeDate.getDate();
+    var month = activeDate.getMonth() + 1;
+    var year = activeDate.getFullYear();
+    console.log(activeDate);
+    return date + "-" + month + "-" + year; //format: dd-mm-yyyy;
+  };
+
+  const _onPress = (item) => {
+    let newActiveDate = new Date();
+    newActiveDate.setFullYear(state.activeDate.getFullYear());
+    newActiveDate.setMonth(state.activeDate.getMonth());
+    newActiveDate.setDate(item);
+
+    setState({ activeDate: newActiveDate });
+
+    navigation.navigate("Budget_day_view", getCompletDate(newActiveDate));
+  };
+
+  const changeMonth = (n) => {
+    let newActiveDate = new Date();
+    newActiveDate.setFullYear(state.activeDate.getFullYear());
+    newActiveDate.setMonth(state.activeDate.getMonth() + n);
+    newActiveDate.setDate(state.activeDate.getDate());
+    setState({ activeDate: newActiveDate });
+  };
+
+  var rows = [];
+  rows = matrix.map((row, rowIndex) => {
+    var rowItems = row.map((item, colIndex) => {
+      var itemKey = rowIndex.toString() + colIndex.toString();
+      return (
+        <Text
+          key={itemKey}
+          style={{
+            flex: 1,
+            height: "100%",
+            textAlign: "center",
+            textAlignVertical: "center",
+            // Highlight header
+            // backgroundColor: rowIndex == 0 ? "#adad" : "#11c",
+            // Highlight Sundays
+            color: colIndex == 0 ? "#a00" : "#000",
+            // Highlight current date
+            fontSize: rowIndex == 0 ? 25 : 25,
+
+            fontWeight:
+              item == state.activeDate.getDate() || rowIndex == 0
+                ? "bold"
+                : "normal",
+          }}
+          onPress={() => _onPress(item)}
+        >
+          {item != -1 ? item : ""}
+          {"\n"}
+          {rowIndex != 0 && item != -1 ? amount : ""}
+        </Text>
+      );
+    });
+    return (
+      <View key={rowIndex} style={Styles.calendarRow}>
+        {rowItems}
+      </View>
+    );
+  });
   return (
-    <Calendar
-      style={{
-        borderWidth: 1,
-        borderColor: "gray",
-        // height: 325,
-      }}
-      // Initially visible month. Default = now
-      current={"2022-02-01"}
-      // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
-      minDate={"2020-01-01"}
-      // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
-      //   maxDate={"2012-05-30"}
-      // Handler which gets executed on day press. Default = undefined
-      onDayPress={(day) => {
-        console.log("selected day", day);
-      }}
-      // Handler which gets executed on day long press. Default = undefined
-      onDayLongPress={(day) => {
-        console.log("selected day", day);
-      }}
-      // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
-      //   monthFormat={"yyyy MM"}
-      // Handler which gets executed when visible month changes in calendar. Default = undefined
-      onMonthChange={(month) => {
-        console.log("month changed", month);
-      }}
-      // Hide month navigation arrows. Default = false
-      // hideArrows={true}
-      // Replace default arrows with custom ones (direction can be 'left' or 'right')
-      // renderArrow={direction => <Arrow />}
-      // Do not show days of other months in month page. Default = false
-      //   hideExtraDays={true}
-      // If hideArrows = false and hideExtraDays = false do not switch month when tapping on greyed out
-      // day from another month that is visible in calendar page. Default = false
-      //   disableMonthChange={true}
-      // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday
-      //   firstDay={1}
-      // Hide day names. Default = false
-      //   hideDayNames={true}
-      // Show week numbers to the left. Default = false
-      // showWeekNumbers={true}
-      // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-      onPressArrowLeft={(subtractMonth) => subtractMonth()}
-      // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-      onPressArrowRight={(addMonth) => addMonth()}
-      // Disable left arrow. Default = false
-      //   disableArrowLeft={true}
-      // Disable right arrow. Default = false
-      //   disableArrowRight={true}
-      // Disable all touch events for disabled days. can be override with disableTouchEvent in markedDates
-      disableAllTouchEventsForDisabledDays={true}
-      // Replace default month and year title with custom one. the function receive a date as parameter
-      // renderHeader={date => {
-      //   /*Return JSX*/
-      //   <Text>Header</Text>
-      // }}
-      // Enable the option to swipe between months. Default = false
-      enableSwipeMonths={true}
-    />
+    <View style={Styles.container}>
+      <View style={Styles.calendarHeader}>
+        <Pressable onPress={() => changeMonth(-1)}>
+          <Image
+            style={Styles.buttonIcon}
+            source={require("../assets/icons/navigate_before.png")}
+          />
+        </Pressable>
+
+        <Text style={Styles.headerText}>
+          {months[state.activeDate.getMonth()]} &nbsp;
+          {state.activeDate.getFullYear()} &ensp;
+          <Text
+            style={{
+              color: "#ff0000",
+              fontWeight: "bold",
+              fontStyle: "italic",
+            }}
+          >
+            {" "}
+            - &ensp;
+            {amount}{" "}
+          </Text>
+        </Text>
+
+        <Pressable onPress={() => changeMonth(1)}>
+          <Image
+            style={Styles.buttonIcon}
+            source={require("../assets/icons/navigate_next.png")}
+          />
+        </Pressable>
+      </View>
+      {rows}
+    </View>
   );
 }
+
+const Styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+    // backgroundColor: '#789000',
+  },
+  calendarRow: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    fontStyle: "italic",
+  },
+  calendarHeader: {
+    flex: 0.6,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  buttonIcon: {
+    width: 30,
+    height: 30,
+  },
+});

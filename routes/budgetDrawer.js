@@ -2,6 +2,7 @@ import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import YearView from "../screens/budgetYearScreen";
 import BudgetMonthView from "../screens/budgetMonthScreen";
+import DailyBudgetView from "../screens/budgetDailyScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -21,6 +22,7 @@ export default function BudgetDrawer({ route, navigation }) {
     >
       <Drawer.Screen name="Budget_month_view" component={BudgetMonthView} />
       <Drawer.Screen name="Budget_year_view" component={YearView} />
+      <Drawer.Screen name="Budget_day_view" component={DailyBudgetView} />
     </Drawer.Navigator>
   );
 }

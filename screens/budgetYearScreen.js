@@ -12,7 +12,7 @@ import {
 
 function getYears(selectedYear) {
   var yearList = [];
-  //   console.log(parseInt(selectedYear));
+
   for (let i = 0; i < 100; i++) {
     yearList.push(parseInt(selectedYear) - i);
   }
@@ -21,10 +21,10 @@ function getYears(selectedYear) {
 
 export default function YearView({ route, navigation }) {
   const [yearModalVisible, setYearModalVisible] = useState(false);
-  const [selectedYear, setSelectedYear] = useState("2022");
+  const [selectedYear, setSelectedYear] = useState(2022);
   const monthNames = [
     "January",
-    "Febroury",
+    "February",
     "March",
     "April",
     "May",
@@ -36,7 +36,7 @@ export default function YearView({ route, navigation }) {
     "November",
     "December",
   ];
-  //   console.log(selectedYear);
+
   return (
     <View style={Styles.container}>
       <View style={Styles.header}>
@@ -47,9 +47,7 @@ export default function YearView({ route, navigation }) {
           onRequestClose={() => setYearModalVisible(false)}
         >
           <View style={Styles.centered_view}>
-            <Button title="Cancel"
-            onPress={() => setYearModalVisible(false)}
-            />
+            <Button title="Cancel" onPress={() => setYearModalVisible(false)} />
             <View style={Styles.modal}>
               <FlatList
                 keyExtractor={(item, index) => index.toString()}
@@ -89,7 +87,9 @@ export default function YearView({ route, navigation }) {
           data={monthNames}
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => navigation.navigate("Budget_month_view", item)}
+              onPress={() =>
+                navigation.navigate("Budget_month_view", { selectedYear, item })
+              }
             >
               <View style={Styles.monthItemView}>
                 <Text style={Styles.monthText}>{item}</Text>
@@ -139,9 +139,8 @@ const Styles = StyleSheet.create({
   centered_view: {
     flex: 1,
     justifyContent: "center",
-    alignItems: 'center',
-    backgroundColor: '#00000099',
-
+    alignItems: "center",
+    backgroundColor: "#00000099",
   },
   modal: {
     width: "50%",
@@ -152,7 +151,7 @@ const Styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#000",
     borderRadius: 20,
-  }, 
+  },
   yearItemView: {
     padding: 10,
     flexDirection: "row",
@@ -167,9 +166,9 @@ const Styles = StyleSheet.create({
     alignContent: "center",
   },
   selectedYear: {
-      fontSize: 30,
+    fontSize: 30,
   },
   selectedYearBudget: {
-      fontSize: 30,
+    fontSize: 30,
   },
 });
