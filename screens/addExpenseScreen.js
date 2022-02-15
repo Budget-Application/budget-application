@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 
-export default function AddExpenseScreen() {
+export default function AddExpenseScreen({ route, navigation }) {
   return (
     <View style={style.container}>
       <Text>Add Expense Screen</Text>

@@ -58,7 +58,7 @@ const generateMatrix = (state) => {
 export default function BudgetCalendar({ state, setState, navigation }) {
   const [amount, setAmount] = useState(100);
   var matrix = generateMatrix(state);
-
+  // console.log(state);
   const getCompletDate = (activeDate) => {
     var date = activeDate.getDate();
     var month = activeDate.getMonth() + 1;
@@ -75,7 +75,9 @@ export default function BudgetCalendar({ state, setState, navigation }) {
 
     setState({ activeDate: newActiveDate });
 
-    navigation.navigate("Budget_day_view", getCompletDate(newActiveDate));
+    navigation.navigate("Budget_day_view", {
+      date: getCompletDate(newActiveDate),
+    });
   };
 
   const changeMonth = (n) => {
