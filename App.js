@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import React, { useState } from "react";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
-import { StyleSheet } from "react-native";
+import { StyleSheet, LogBox } from "react-native";
 import CreateNavigationContainer from "./routes/homeStack";
 import {
   NunitoSans_200ExtraLight,
@@ -27,6 +27,7 @@ import {
 // });
 
 export default function App() {
+  LogBox.ignoreLogs(["Setting a timer"]);
   let [fontsLoaded, setFontsLoaded] = useFonts({
     NunitoSans_200ExtraLight,
     NunitoSans_200ExtraLight_Italic,
