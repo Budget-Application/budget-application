@@ -8,6 +8,8 @@ import AddExpenseScreen from "../screens/addExpenseScreen";
 const Drawer = createDrawerNavigator();
 
 export default function BudgetDrawer({ route, navigation }) {
+  console.log("Budget Drawer");
+  console.log(route.params);
   return (
     <Drawer.Navigator
       initialRouteName="Budget_month_view"
@@ -21,7 +23,7 @@ export default function BudgetDrawer({ route, navigation }) {
         headerShown: false,
       }}
     >
-      <Drawer.Screen name="Budget_month_view" component={BudgetMonthView} />
+      <Drawer.Screen name="Budget_month_view" component={BudgetMonthView} initialParams={{budget_id: route.params.budget_id}}/>
       <Drawer.Screen name="Budget_year_view" component={YearView} />
       <Drawer.Screen name="Budget_day_view" component={DailyBudgetView} />
     </Drawer.Navigator>

@@ -31,7 +31,7 @@ export const getUserBudgetList = async (uid) => {
     const querySnap = await getDocs(collection(db, `users/${uid}/budgets`));
     let budgetList = [];
     querySnap.forEach((doc) => {
-      budgetList.push(doc.data());
+      budgetList.push({...doc.data(), budget_id: doc.id});
     });
     return budgetList;
   } catch (e) {
