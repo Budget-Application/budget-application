@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, Pressable, Image } from "react-native";
+import { StyleSheet, View, Text, Pressable, Image } from "react-native";
+import GetCompleteDate from "./getCompletDate";
 
 const months = [
   "January",
@@ -58,14 +59,6 @@ const generateMatrix = (state) => {
 export default function BudgetCalendar({ state, setState, navigation }) {
   const [amount, setAmount] = useState(100);
   var matrix = generateMatrix(state);
-  // console.log(state);
-  const getCompletDate = (activeDate) => {
-    var date = activeDate.getDate();
-    var month = activeDate.getMonth() + 1;
-    var year = activeDate.getFullYear();
-    console.log(activeDate);
-    return date + "-" + month + "-" + year; //format: dd-mm-yyyy;
-  };
 
   const _onPress = (item) => {
     let newActiveDate = new Date();
@@ -76,7 +69,7 @@ export default function BudgetCalendar({ state, setState, navigation }) {
     setState({ activeDate: newActiveDate });
 
     navigation.navigate("Budget_day_view", {
-      date: getCompletDate(newActiveDate),
+      date: GetCompleteDate(newActiveDate),
     });
   };
 
