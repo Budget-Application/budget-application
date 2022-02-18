@@ -1,22 +1,54 @@
-import React, { Component, useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  StatusBar,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import BudgetItem from "../components/budgetItem";
 import * as user from "../db/apis/user.js";
-
-const renderHeader = () => {
-  return (
-    <View style={style.headerView}>
-      <Text style={style.headerText}>Header</Text>
-    </View>
-  );
-};
+import MyIcon from "../components/addFabIcon";
 
 export default function Home({ navigation }) {
   const [budgetData, setBudgetData] = useState([]);
+
   useEffect(async () => {
     const budgetList = await user.getUserBudgetList("testUser");
     setBudgetData(budgetList);
   }, []);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View
+          style={{
+            // flex:1,
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              padding: 10,
+            }}
+          >
+            <MyIcon name={"search"} size={25} color={"#f0f0f0"} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+            }}
+          >
+            <MyIcon name={"more-vertical"} size={25} color={"#f0f0f0"} />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
+
   return (
     <View style={style.container}>
       <FlatList
@@ -28,13 +60,13 @@ export default function Home({ navigation }) {
         ItemSeparatorComponent={() => (
           <View
             style={{
-              height: 10,
-              backgroundColor: "#000",
+              alignSelf: "flex-end",
+              width: "83%",
+              height: 1,
+              backgroundColor: "#c0c0c0",
             }}
           />
         )}
-        // ListHeaderComponent={renderHeader}
-        // ListHeaderComponentStyle
       />
     </View>
   );
@@ -44,17 +76,16 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     // marginTop: StatusBar.currentHeight,
-    backgroundColor: "green",
+    backgroundColor: "#f0f0f0",
   },
   headerView: {
     flexDirection: "row",
-    backgroundColor: "pink",
+    backgroundColor: "#f0f0f0",
     justifyContent: "center",
     alignContent: "center",
   },
   headerText: {
     fontSize: 50,
-    // backgroundColor: 'purple',
     justifyContent: "center",
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -29,6 +29,11 @@ export default function DailyBudgetView({ route, navigation }) {
     { expenseName: "Rent12", amount: 10 },
     { expenseName: "Rent13", amount: 10 },
   ]);
+
+  // useEffect(()=>{
+  //   setDailyExpense({})
+  //   console.log("inside", route.params);
+  // }, [route.params]);
   // console.log(route.params.homeStackNavigator.navigate);
   return (
     <View style={Styles.container}>

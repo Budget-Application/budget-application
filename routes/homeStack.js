@@ -24,7 +24,11 @@ export default function CreateNavigationContainer() {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ title: "Home" }}
+          options={{
+            title: "Home",
+            headerTitleAlign: "left",
+            headerRightContainerStyle: { paddingRight: 10 },
+          }}
         />
         <Stack.Screen
           name="BudgetDrawer"
@@ -35,13 +39,6 @@ export default function CreateNavigationContainer() {
           name="AddExpense"
           component={AddExpenseScreen}
           options={{
-            headerRight: () => (
-              <Button
-                onPress={() => alert("This is a button!")}
-                title="Info"
-                color="#00cc00"
-              />
-            ),
             headerRightContainerStyle: { paddingRight: 20 },
             headerBackImage: () => <MyIcon name={"x"} />,
             headerLeftContainerStyle: { paddingLeft: 5 },
