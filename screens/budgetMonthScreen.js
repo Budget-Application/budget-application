@@ -21,13 +21,12 @@ export default function BudgetMonthView({ route, navigation }) {
   const [state, setState] = useState({
     activeDate: new Date(),
   });
-  // console.log(route.params);
   useEffect(() => {
     if (route.params?.selectedYear) {
       // console.log("Calling BudgetMonth");
       var date = new Date();
       date.setFullYear(route.params.selectedYear);
-      date.setMonth(monthNames[route.params.item]);
+      date.setMonth(monthNames[route.params.selectedMonth]);
       setState({ activeDate: date });
     }
   }, [route.params]);

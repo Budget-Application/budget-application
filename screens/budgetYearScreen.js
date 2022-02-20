@@ -88,7 +88,11 @@ export default function YearView({ route, navigation }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate("Budget_month_view", { selectedYear, item })
+                navigation.navigate("Budget_month_view", {
+                  selectedYear,
+                  selectedMonth: item,
+                  budget_id: route.params.budget_id,
+                })
               }
             >
               <View style={Styles.monthItemView}>

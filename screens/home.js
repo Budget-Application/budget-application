@@ -4,9 +4,8 @@ import {
   View,
   Text,
   FlatList,
-  StatusBar,
-  Button,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import BudgetItem from "../components/budgetItem";
 import * as user from "../db/apis/user.js";
@@ -14,10 +13,13 @@ import MyIcon from "../components/addFabIcon";
 
 export default function Home({ navigation }) {
   const [budgetData, setBudgetData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(async () => {
+    setIsLoading(true);
     const budgetList = await user.getUserBudgetList("testUser");
     setBudgetData(budgetList);
+    setIsLoading(false);
   }, []);
 
   React.useLayoutEffect(() => {
@@ -50,33 +52,43 @@ export default function Home({ navigation }) {
   }, [navigation]);
 
   return (
-    <View style={style.container}>
-      <FlatList
-        keyExtractor={(item, index) => index.toString()}
-        data={budgetData}
-        renderItem={({ item }) => (
-          <BudgetItem item={item} navigation={navigation} />
-        )}
-        ItemSeparatorComponent={() => (
-          <View
-            style={{
-              alignSelf: "flex-end",
-              width: "83%",
-              height: 1,
-              backgroundColor: "#c0c0c0",
-            }}
-          />
-        )}
-      />
+    <View style={Styles.container}>
+      {isLoading ? (
+        <View style={Styles.loading}>
+          <ActivityIndicator size="large" color="grey" />
+        </View>
+      ) : (
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          data={budgetData}
+          renderItem={({ item }) => (
+            <BudgetItem item={item} navigation={navigation} />
+          )}
+          ItemSeparatorComponent={() => (
+            <View
+              style={{
+                alignSelf: "flex-end",
+                width: "83%",
+                height: 1,
+                backgroundColor: "#c0c0c0",
+              }}
+            />
+          )}
+        />
+      )}
     </View>
   );
 }
 
-const style = StyleSheet.create({
+const Styles = StyleSheet.create({
   container: {
     flex: 1,
     // marginTop: StatusBar.currentHeight,
     backgroundColor: "#f0f0f0",
+    justifyContent: "center",
+  },
+  loading: {
+    // backgroundColor: "red",
   },
   headerView: {
     flexDirection: "row",
