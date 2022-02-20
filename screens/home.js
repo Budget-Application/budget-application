@@ -10,6 +10,7 @@ import {
 import BudgetItem from "../components/budgetItem";
 import * as user from "../db/apis/user.js";
 import MyIcon from "../components/addFabIcon";
+import LoadingView from "../components/loadingView";
 
 export default function Home({ navigation }) {
   const [budgetData, setBudgetData] = useState([]);
@@ -54,9 +55,7 @@ export default function Home({ navigation }) {
   return (
     <View style={Styles.container}>
       {isLoading ? (
-        <View style={Styles.loading}>
-          <ActivityIndicator size="large" color="grey" />
-        </View>
+        <LoadingView />
       ) : (
         <FlatList
           keyExtractor={(item, index) => index.toString()}
@@ -86,9 +85,6 @@ const Styles = StyleSheet.create({
     // marginTop: StatusBar.currentHeight,
     backgroundColor: "#f0f0f0",
     justifyContent: "center",
-  },
-  loading: {
-    // backgroundColor: "red",
   },
   headerView: {
     flexDirection: "row",

@@ -3,18 +3,18 @@ import { StyleSheet, View, Text } from "react-native";
 import BudgetCalendar from "../components/calenderView";
 
 const monthNames = {
-  January: 0,
-  February: 1,
-  March: 2,
-  April: 3,
-  May: 4,
-  June: 5,
-  July: 6,
-  August: 7,
-  September: 8,
-  October: 9,
-  November: 10,
-  December: 11,
+  "January": 0,
+  "February": 1,
+  "March": 2,
+  "April": 3,
+  "May": 4,
+  "June": 5,
+  "July": 6,
+  "August": 7,
+  "September": 8,
+  "October": 9,
+  "November": 10,
+  "December": 11,
 };
 
 export default function BudgetMonthView({ route, navigation }) {
@@ -23,7 +23,6 @@ export default function BudgetMonthView({ route, navigation }) {
   });
   useEffect(() => {
     if (route.params?.selectedYear) {
-      // console.log("Calling BudgetMonth");
       var date = new Date();
       date.setFullYear(route.params.selectedYear);
       date.setMonth(monthNames[route.params.selectedMonth]);
@@ -37,6 +36,7 @@ export default function BudgetMonthView({ route, navigation }) {
         state={state}
         setState={setState}
         navigation={navigation}
+        budget_id={route.params.budget_id}
       />
     </View>
   );
