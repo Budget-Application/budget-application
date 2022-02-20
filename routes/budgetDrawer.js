@@ -23,7 +23,7 @@ export default function BudgetDrawer({ route, navigation }) {
         headerShown: false,
       }}
     >
-      <Drawer.Screen name="Budget_month_view" component={BudgetMonthView} initialParams={{budget_id: route.params.budget_id}}/>
+      <Drawer.Screen name="Budget_month_view" component={BudgetMonthView} initialParams={{budget_id: route.params.id}}/>
       <Drawer.Screen name="Budget_year_view" component={YearView} />
       <Drawer.Screen name="Budget_day_view" component={DailyBudgetView} />
     </Drawer.Navigator>
