@@ -1,71 +1,71 @@
 {
-    "users": {
-      "uid": {
-        "name": "NAME",
-        "phone_no": 123,
-        "email": "abc@gmail.com",
-        "budgets": {
-          "budget_id": {
-            "budget_name": "BNAME",
-            "budget_total": 123,
-            "last_updated_time": {
-              "nanoseconds": 0,
-              "seconds": 1644296400
-            }
+  "users": {
+    "uid": {
+      "name": "NAME",
+      "phone_no": 123,
+      "email": "abc@gmail.com",
+      "budgets": {
+        "budget_id": {
+          "budget_name": "BNAME",
+          "budget_total": 123,
+          "last_updated_time": {
+            "nanoseconds": 0,
+            "seconds": 1644296400
           }
         }
       }
-    },
-    "budgets": {
-      "budget_id": {
-        "budget_name":"BNAME",
-        "total_expenses":123,
-        "users": {
-          "uid1": true,
-          "uid2": true
+    }
+  },
+  "budgets": {
+    "budget_id": {
+      "budget_name": "BNAME",
+      "budget_total": 123,
+      "last_updated_time": {
+        "nanoseconds": 0,
+        "seconds": 1644296400
+      },
+      "users": ["uid1", "uid2"],
+      "expense_categories": {
+        "expId1": {
+          "expense_name": "Ename1"
         },
-        "expense_categories": {
-          "expId1": {
-            "expense_name": "Ename1"
-          },
-          "expId2": {
-            "expense_name": "Ename2"
-          }
+        "expId2": {
+          "expense_name": "Ename2"
+        }
+      },
+      "yearly_expenses": {
+        "1999": {
+          "0-jan": 123,
+          "1-feb": 234,
+          "2-march": 789
         },
-        "yearly_expenses": {
-          "1999": {
-            "jan": 123,
-            "feb": 234,
-            "dec": 789
-          },
-          "2000": {
-            "jan": 123,
-            "feb": 234,
-            "dec": 789
-          }
-        },
-        "monthly_expenses": {
-          "05-1999": {
-            "d1": 1,
-            "d31": 10
-          }
-        },
-        "daily_expenses": {
-          "23-05-1999": {
-            "daily_total": 100,
-            "expenses": {
-              "expId1": {
-                "expense_name": "Ename1",
-                "amount": 123
-              },
-              "expId2": {
-                "expense_name": "Ename2",
-                "amount": 113
-              }
+        "2000": {
+          "jan": 123,
+          "feb": 234,
+          "dec": 789
+        }
+      },
+      "monthly_expenses": {
+        "05-1999": {
+          "1": 1,
+          "31": 10
+        }
+      },
+      "daily_expenses": {
+        "23-05-1999": {
+          "daily_total": 100,
+          "expenses": {
+            "expId1": {
+              "expense_name": "Ename1",
+              "amount": 123
+            },
+            "expId2": {
+              "expense_name": "Ename2",
+              "amount": 113
             }
           }
         }
       }
     }
   }
-  
+}
