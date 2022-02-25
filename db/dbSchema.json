@@ -6,12 +6,7 @@
       "email": "abc@gmail.com",
       "budgets": {
         "budget_id": {
-          "budget_name": "BNAME",
-          "budget_total": 123,
-          "last_updated_time": {
-            "nanoseconds": 0,
-            "seconds": 1644296400
-          }
+          "ref": "/budgets/budget_id"
         }
       }
     }
