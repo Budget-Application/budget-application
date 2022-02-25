@@ -10,6 +10,7 @@ export default function LoadingView() {
 
 const Styles = StyleSheet.create({
   loading: {
-    // backgroundColor: "red",
+    flex:1,
+    justifyContent: "center"
   },
 });

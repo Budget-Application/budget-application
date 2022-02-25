@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,21 +7,30 @@ import {
   TouchableOpacity,
   Pressable,
   Modal,
-  Button,
+  TouchableWithoutFeedback,
 } from "react-native";
+import { getYearlyExpense } from "../db/apis/budget";
+import LoadingView from "../components/loadingView";
+import { MyAntIcon } from "../components/addFabIcon";
 
-function getYears(selectedYear) {
+function getYears() {
   var yearList = [];
-
-  for (let i = 0; i < 100; i++) {
-    yearList.push(parseInt(selectedYear) - i);
+  currentYear = parseInt(new Date().getFullYear());
+  for (let i = 2020; i <= currentYear; i++) {
+    yearList.push(i);
   }
   return yearList;
 }
 
 export default function YearView({ route, navigation }) {
   const [yearModalVisible, setYearModalVisible] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(2022);
+  const [expenseDetails, setExpenseDetails] = useState({
+    selectedYear: null,
+    budgetId: null,
+    yearExpense: {},
+    yearTotal: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
   const monthNames = [
     "January",
     "February",
@@ -37,79 +46,144 @@ export default function YearView({ route, navigation }) {
     "December",
   ];
 
+  useEffect(async () => {
+    setIsLoading(true);
+    await updateYearExpenseData(
+      route.params.budget_id,
+      route.params.selectedYear
+    );
+    setIsLoading(false);
+  }, [route.params]);
+
+  updateYearExpenseData = async (budgetId, selectedYear) => {
+    let expense = await getYearlyExpense(budgetId, selectedYear);
+    let yearTotal = 0;
+    for (let i = 1; i <= 12; i++) {
+      yearTotal += expense[i] ? expense[i] : 0;
+    }
+    setExpenseDetails({
+      budgetId: budgetId,
+      selectedYear: selectedYear,
+      yearExpense: expense,
+      yearTotal: yearTotal,
+    });
+  };
+
+  const yearList = getYears();
+
   return (
     <View style={Styles.container}>
-      <View style={Styles.header}>
-        <Modal
-          animationType="fade"
-          transparent
-          visible={yearModalVisible}
-          onRequestClose={() => setYearModalVisible(false)}
-        >
-          <View style={Styles.centered_view}>
-            <Button title="Cancel" onPress={() => setYearModalVisible(false)} />
-            <View style={Styles.modal}>
-              <FlatList
-                keyExtractor={(item, index) => index.toString()}
-                data={getYears(selectedYear)}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setSelectedYear(item);
-                      setYearModalVisible(false);
-                    }}
+      {isLoading ? (
+        <LoadingView />
+      ) : (
+        <View style={{ flex: 1 }}>
+          <View style={Styles.header}>
+            <Modal
+              animationType="fade"
+              transparent
+              visible={yearModalVisible}
+              onRequestClose={() => setYearModalVisible(false)}
+            >
+              <TouchableWithoutFeedback
+                onPress={() => setYearModalVisible(false)}
+              >
+                <View style={Styles.centered_view}>
+                  <TouchableWithoutFeedback
+                    onPress={() => setYearModalVisible(false)}
                   >
-                    <View style={Styles.yearItemView}>
-                      <Text style={Styles.yearText}>{item}</Text>
+                    <View style={Styles.modal}>
+                      <FlatList
+                        keyExtractor={(item, index) => index.toString()}
+                        data={getYears()}
+                        renderItem={({ item }) => (
+                          <TouchableOpacity
+                            onPress={async () => {
+                              setYearModalVisible(false);
+                              setIsLoading(true);
+                              await updateYearExpenseData(
+                                expenseDetails.budgetId,
+                                item
+                              );
+                              setIsLoading(false);
+                            }}
+                          >
+                            <View style={Styles.yearItemView}>
+                              <Text style={Styles.yearText}>{item}</Text>
+                            </View>
+                          </TouchableOpacity>
+                        )}
+                        ItemSeparatorComponent={() => (
+                          <View
+                            style={{
+                              height: 1,
+                              backgroundColor: "#000",
+                            }}
+                          />
+                        )}
+                      />
                     </View>
-                  </TouchableOpacity>
-                )}
-                ItemSeparatorComponent={() => (
+                  </TouchableWithoutFeedback>
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
+            <Pressable
+              style={Styles.selectedYearView}
+              onPress={() => setYearModalVisible(true)}
+            >
+              <Text style={Styles.selectedYearText}>
+                {expenseDetails.selectedYear} &nbsp;
+                <MyAntIcon name={"caretdown"} size={12} />
+              </Text>
+              <Text style={Styles.selectedYearBudget}>
+                Year Total: {"\u20B9"}
+                {expenseDetails.yearTotal}
+              </Text>
+            </Pressable>
+          </View>
+          <View style={{ flex: 92 }}>
+            <FlatList
+              keyExtractor={(item, index) => index.toString()}
+              data={monthNames}
+              renderItem={({ item, index }) => (
+                <TouchableOpacity
+                  style={Styles.monthItemView}
+                  onPress={() =>
+                    navigation.navigate("Budget_month_view", {
+                      selectedYear: expenseDetails.selectedYear,
+                      selectedMonth: item,
+                      budget_id: route.params.budget_id,
+                    })
+                  }
+                >
+                  <Text style={Styles.monthText}>{item}</Text>
                   <View
                     style={{
-                      height: 1,
-                      backgroundColor: "#000",
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
                     }}
-                  />
-                )}
-              />
-            </View>
-          </View>
-        </Modal>
-        <Pressable onPress={() => setYearModalVisible(true)}>
-          <Text style={Styles.selectedYear}>{selectedYear}</Text>
-        </Pressable>
-        <Text style={Styles.selectedYearBudget}> Amount </Text>
-      </View>
-      <View>
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          data={monthNames}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Budget_month_view", {
-                  selectedYear,
-                  selectedMonth: item,
-                  budget_id: route.params.budget_id,
-                })
-              }
-            >
-              <View style={Styles.monthItemView}>
-                <Text style={Styles.monthText}>{item}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                height: 1,
-                backgroundColor: "#000",
-              }}
+                  >
+                    <Text style={Styles.monthAmount}>
+                      {"\u20B9"}
+                      {expenseDetails.yearExpense[index + 1]
+                        ? expenseDetails.yearExpense[index + 1]
+                        : 0}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    height: 1,
+                    backgroundColor: "#000",
+                  }}
+                />
+              )}
             />
-          )}
-        />
-      </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -117,28 +191,33 @@ export default function YearView({ route, navigation }) {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "pink",
-    // justifyContent: 'center',
-    // alignContent: 'center',
+    backgroundColor: "#f0f0f0",
   },
   header: {
+    flex: 8,
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
+    alignContent: "center",
+    backgroundColor: "#d5f2ea",
   },
   monthItemView: {
-    padding: 10,
-    backgroundColor: "red",
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
   },
   monthText: {
+    flex: 1,
+    fontSize: 20,
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+  monthAmount: {
+    margin: 10,
+    flex: 0.5,
     padding: 10,
-    backgroundColor: "yellow",
-    fontSize: 30,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#00f2aa",
+    color: "#000000",
+    fontSize: 20,
+    textAlign: "center",
+    borderRadius: 100,
   },
   centered_view: {
     flex: 1,
@@ -150,8 +229,7 @@ const Styles = StyleSheet.create({
     width: "50%",
     height: "75%",
     justifyContent: "center",
-    // alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f0f0f0",
     borderWidth: 1,
     borderColor: "#000",
     borderRadius: 20,
@@ -164,15 +242,22 @@ const Styles = StyleSheet.create({
   },
   yearText: {
     padding: 10,
-    // backgroundColor: "yellow",
-    fontSize: 30,
+    fontSize: 20,
     justifyContent: "center",
     alignContent: "center",
   },
-  selectedYear: {
-    fontSize: 30,
+  selectedYearView: {
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  selectedYearText: {
+    fontSize: 20,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   selectedYearBudget: {
-    fontSize: 30,
+    color: "#808080",
+    textAlign: "center",
+    fontSize: 12,
   },
 });
