@@ -1,25 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import GetCompleteDate from "./getCompletDate";
-import { FormatAMPM } from "./getCompletDate";
+import { formatLastUpdatedTime } from "./resuableFunctions";
 
 export default function BudgetItem({ item, navigation }) {
   const budgetPressHandler = () => {
     navigation.navigate("BudgetDrawer", item);
-  };
-
-  const lastUpdatedTime = (time) => {
-    var lastUpDate = new Date(time*1000);
-    var currentDate = new Date();
-
-    if (currentDate.getDate() == lastUpDate.getDate()){
-      return FormatAMPM(lastUpDate);
-    }
-    else if (currentDate.getDate() - 1 == lastUpDate.getDate()){
-      return "yesterday";
-    }
-    else
-      return GetCompleteDate(lastUpDate);
   };
 
   return (
@@ -42,7 +27,7 @@ export default function BudgetItem({ item, navigation }) {
         </View>
         <View style={Styles.lastTimeView}>
           <Text style={Styles.lastTimeText}>
-            {lastUpdatedTime(item.last_updated_time.seconds)}
+            {formatLastUpdatedTime(item.last_updated_time.seconds)}
           </Text>
         </View>
       </View>
