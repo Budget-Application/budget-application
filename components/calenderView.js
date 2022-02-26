@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, Pressable, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  Image,
+  Dimensions,
+} from "react-native";
 import GetCompleteDate from "./getCompletDate";
 import { getMonthlyExpense } from "../db/apis/budget";
 import LoadingView from "../components/loadingView";
 import MyIcon from "./addFabIcon";
+import { RFPercentage } from "react-native-responsive-fontsize";
 
 const months = [
   "January",
@@ -20,7 +28,7 @@ const months = [
   "December",
 ];
 
-const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const weekDays = ["S", "M", "T", "W", "T", "F", "S"];
 
 const nDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -77,7 +85,8 @@ export default function BudgetCalendar({
 }) {
   const [row, setRow] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [totalMonthAmount, setTotalMonthAmount] = useState(0);
+  var matrix = null;
+
   var monthlyData = {};
 
   useEffect(async () => {
@@ -92,56 +101,137 @@ export default function BudgetCalendar({
     );
     monthlyData = data;
 
-    setRow(fillRowData());
-    setTotalMonthAmount(getTotalMonthAmount(monthlyData));
+    matrix = generateMatrix(state);
+    setRow(fillRowData(matrix));
     setIsLoading(false);
   }, [state]);
 
-  const fillRowData = () => {
+  const fillDayRowData = (matrix) => {
     var rows = [];
-    var matrix = generateMatrix(state);
 
     rows = matrix.map((row, rowIndex) => {
-      var rowItems = row.map((item, colIndex) => {
-        var itemKey = rowIndex.toString() + colIndex.toString();
-        return (
+      return (
+        <View key={rowIndex} style={Styles.calendarDayRow}>
           <Text
-            key={itemKey}
             style={{
-              flex: 1,
-              height: "100%",
+              color: rowIndex == 0 ? "#a00" : "#000",
+              fontWeight: "bold",
+              fontSize: RFPercentage(3),
+              width: "100%",
               textAlign: "center",
               textAlignVertical: "center",
-              // Highlight header
-              // backgroundColor: rowIndex == 0 ? "#adad" : "#11c",
-              // Highlight Sundays
-              color: colIndex == 0 ? "#a00" : "#000",
-              // Highlight current date
-              fontSize: rowIndex == 0 ? 25 : 25,
-              fontWeight:
-                item == state.activeDate.getDate() || rowIndex == 0
-                  ? "bold"
-                  : "normal",
             }}
-            onPress={() => _onPress(item)}
           >
-            {item}
-            {"\n"}
-            {rowIndex != 0 && item != ""
-              ? item in monthlyData
-                ? monthlyData[item]
-                : 0
-              : ""}
+            {row}
           </Text>
-        );
-      });
+        </View>
+      );
+    });
+    return rows;
+  };
+
+  const fillRowData = (matrix) => {
+    var rows = [];
+    var daysRow = fillDayRowData(matrix[0]);
+    const totalMonthAmount = getTotalMonthAmount(monthlyData);
+    matrix = matrix.slice(1);
+    rows = matrix.map((row, rowIndex) => {
+        var rowItems = row.map((item, colIndex) => {
+          var itemKey = rowIndex.toString() + colIndex.toString();
+          return (
+            <Pressable
+              key={itemKey}
+              style={{
+                // flex: 1,
+                width:"14%",
+                height: "100%",
+              }}
+            >
+              <View
+                key={itemKey}
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  borderRadius: 50,
+                  backgroundColor: item == state.activeDate.getDate() ? "#808080" : "#f0f0f0",
+                  marginVertical: "20%",
+                }}
+              >
+                <Text
+                  key={itemKey}
+                  style={{
+                    textAlign: "center",
+                    textAlignVertical: "center",
+                    color: (item == state.activeDate.getDate()) ? "#ffffff" : colIndex == 0 ? "#a00" : "#000",
+                    fontSize: 20,
+                    fontWeight:
+                      item == state.activeDate.getDate() ? "bold" : "normal",
+                  }}
+                  onPress={() => _onPress(item)}
+                >
+                  {item}
+                </Text>
+                <Text
+                  style={{
+                    color: (item == state.activeDate.getDate()) ? "#ffffff" : colIndex == 0 ? "#a00" : "#000",
+                    textAlign: "center",
+                    textAlignVertical: "center",
+                    fontSize: 12,
+                  }}
+                >
+                  {item != ""
+                    ? item in monthlyData
+                      ? monthlyData[item]
+                      : 0
+                    : ""}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        });
       return (
         <View key={rowIndex} style={Styles.calendarRow}>
           {rowItems}
         </View>
       );
     });
-    return rows;
+    return (
+      <View style={Styles.innerContainer}>
+        <View style={Styles.calendarHeader}>
+          <Pressable onPress={() => changeMonth(-1)}>
+            <MyIcon name={"arrow-left"} color={"#000000"} size={25} />
+          </Pressable>
+
+          <Text style={Styles.headerText}>
+            {months[state.activeDate.getMonth()]} &nbsp;
+            {state.activeDate.getFullYear()} &ensp;
+            {" "}
+              - &ensp;
+            <Text
+              style={{
+                color: "#808080",
+                fontWeight: "bold",
+                fontStyle: "italic",
+              }}
+            >
+              {totalMonthAmount}{" "}
+            </Text>
+          </Text>
+
+          <Pressable onPress={() => changeMonth(1)}>
+            <MyIcon name={"arrow-right"} color={"#000000"} size={25} />
+          </Pressable>
+        </View>
+        <View style={Styles.calendarDayRow}>{daysRow}</View>
+        <View
+          style={{
+            flex: 10,
+          }}
+        >
+          {rows}
+        </View>
+      </View>
+    );
   };
 
   const _onPress = (item) => {
@@ -167,38 +257,7 @@ export default function BudgetCalendar({
 
   return (
     <View style={Styles.container}>
-      {isLoading ? (
-        <LoadingView />
-      ) : (
-        <View style={Styles.container}>
-          <View style={Styles.calendarHeader}>
-            <Pressable onPress={() => changeMonth(-1)}>
-              <MyIcon name={"arrow-left"} color={"#000000"} size={25} />
-            </Pressable>
-
-            <Text style={Styles.headerText}>
-              {months[state.activeDate.getMonth()]} &nbsp;
-              {state.activeDate.getFullYear()} &ensp;
-              <Text
-                style={{
-                  color: "#ff0000",
-                  fontWeight: "bold",
-                  fontStyle: "italic",
-                }}
-              >
-                {" "}
-                - &ensp;
-                {totalMonthAmount}{" "}
-              </Text>
-            </Text>
-
-            <Pressable onPress={() => changeMonth(1)}>
-              <MyIcon name={"arrow-right"} color={"#000000"} size={25} />
-            </Pressable>
-          </View>
-          {row}
-        </View>
-      )}
+      {isLoading ? <LoadingView /> : <View style={{ flex: 1 }}>{row}</View>}
     </View>
   );
 }
@@ -208,10 +267,20 @@ const Styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignContent: "center",
-    // backgroundColor: '#789000',
+  },
+  innerContainer: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  calendarDayRow: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
   },
   calendarRow: {
-    flex: 1,
+    // flex: 1,
+    width:"100%",
+    height: "12%",
     flexDirection: "row",
     alignItems: "center",
   },
@@ -221,13 +290,12 @@ const Styles = StyleSheet.create({
     fontStyle: "italic",
   },
   calendarHeader: {
-    flex: 0.6,
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
   },
-
   buttonIcon: {
     width: 30,
     height: 30,
