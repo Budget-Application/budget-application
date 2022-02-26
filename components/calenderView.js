@@ -86,7 +86,7 @@ export default function BudgetCalendar({
   const [row, setRow] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   var matrix = null;
-
+  console.log(state.activeDate.getFullYear());
   var monthlyData = {};
 
   useEffect(async () => {
@@ -136,59 +136,70 @@ export default function BudgetCalendar({
     const totalMonthAmount = getTotalMonthAmount(monthlyData);
     matrix = matrix.slice(1);
     rows = matrix.map((row, rowIndex) => {
-        var rowItems = row.map((item, colIndex) => {
-          var itemKey = rowIndex.toString() + colIndex.toString();
-          return (
-            <Pressable
+      var rowItems = row.map((item, colIndex) => {
+        var itemKey = rowIndex.toString() + colIndex.toString();
+        return (
+          <Pressable
+            key={itemKey}
+            style={{
+              // flex: 1,
+              width: "14%",
+              height: "100%",
+            }}
+          >
+            <View
               key={itemKey}
               style={{
-                // flex: 1,
-                width:"14%",
-                height: "100%",
+                flex: 1,
+                justifyContent: "center",
+                borderRadius: 50,
+                backgroundColor:
+                  item == state.activeDate.getDate() ? "#808080" : "#f0f0f0",
+                marginVertical: "20%",
               }}
             >
-              <View
+              <Text
                 key={itemKey}
                 style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  borderRadius: 50,
-                  backgroundColor: item == state.activeDate.getDate() ? "#808080" : "#f0f0f0",
-                  marginVertical: "20%",
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  color:
+                    item == state.activeDate.getDate()
+                      ? "#ffffff"
+                      : colIndex == 0
+                      ? "#a00"
+                      : "#000",
+                  fontSize: 20,
+                  // fontWeight:
+                  //   item == state.activeDate.getDate() ? "bold" : "normal",
+                }}
+                onPress={() => _onPress(item)}
+              >
+                {item}
+              </Text>
+              <Text
+                style={{
+                  color:
+                    item == state.activeDate.getDate()
+                      ? "#ffffff"
+                      : colIndex == 0
+                      ? "#a00"
+                      : "#000",
+                  textAlign: "center",
+                  textAlignVertical: "center",
+                  fontSize: 12,
                 }}
               >
-                <Text
-                  key={itemKey}
-                  style={{
-                    textAlign: "center",
-                    textAlignVertical: "center",
-                    color: (item == state.activeDate.getDate()) ? "#ffffff" : colIndex == 0 ? "#a00" : "#000",
-                    fontSize: 20,
-                    fontWeight:
-                      item == state.activeDate.getDate() ? "bold" : "normal",
-                  }}
-                  onPress={() => _onPress(item)}
-                >
-                  {item}
-                </Text>
-                <Text
-                  style={{
-                    color: (item == state.activeDate.getDate()) ? "#ffffff" : colIndex == 0 ? "#a00" : "#000",
-                    textAlign: "center",
-                    textAlignVertical: "center",
-                    fontSize: 12,
-                  }}
-                >
-                  {item != ""
-                    ? item in monthlyData
-                      ? monthlyData[item]
-                      : 0
-                    : ""}
-                </Text>
-              </View>
-            </Pressable>
-          );
-        });
+                {item != ""
+                  ? item in monthlyData
+                    ? monthlyData[item]
+                    : 0
+                  : ""}
+              </Text>
+            </View>
+          </Pressable>
+        );
+      });
       return (
         <View key={rowIndex} style={Styles.calendarRow}>
           {rowItems}
@@ -202,21 +213,20 @@ export default function BudgetCalendar({
             <MyIcon name={"arrow-left"} color={"#000000"} size={25} />
           </Pressable>
 
-          <Text style={Styles.headerText}>
-            {months[state.activeDate.getMonth()]} &nbsp;
-            {state.activeDate.getFullYear()} &ensp;
-            {" "}
-              - &ensp;
-            <Text
-              style={{
-                color: "#808080",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-            >
-              {totalMonthAmount}{" "}
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Budget_year_view", {
+                budget_id: budget_id,
+                selectedYear: parseInt(state.activeDate.getFullYear()),
+              });
+            }}
+          >
+            <Text style={Styles.headerText}>
+              {months[state.activeDate.getMonth()]} &nbsp;
+              {state.activeDate.getFullYear()} &ensp; - &ensp;
+              <Text style={Styles.headerAmount}>{totalMonthAmount} </Text>
             </Text>
-          </Text>
+          </Pressable>
 
           <Pressable onPress={() => changeMonth(1)}>
             <MyIcon name={"arrow-right"} color={"#000000"} size={25} />
@@ -279,13 +289,18 @@ const Styles = StyleSheet.create({
   },
   calendarRow: {
     // flex: 1,
-    width:"100%",
+    width: "100%",
     height: "12%",
     flexDirection: "row",
     alignItems: "center",
   },
   headerText: {
     fontSize: 20,
+    fontWeight: "bold",
+    fontStyle: "italic",
+  },
+  headerAmount: {
+    color: "#808080",
     fontWeight: "bold",
     fontStyle: "italic",
   },
