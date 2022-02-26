@@ -41,8 +41,20 @@
       },
       "daily_expenses": {
         "23-05-1999": {
-          "exp1": 100,
-          "exp2": 200
+          "exp1": {
+            "amount": 100,
+            "last_updated_time": {
+              "nanoseconds": 0,
+              "seconds": 1644296400
+            }
+          },
+          "exp2": {
+            "amount": 200,
+            "last_updated_time": {
+              "nanoseconds": 0,
+              "seconds": 1644296400
+            }
+          }
         }
       }
     }

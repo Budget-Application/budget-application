@@ -12,6 +12,7 @@ import MyIcon from "../components/addFabIcon";
 import GetCompleteDate from "../components/getCompletDate";
 import { getDailyExpense } from "../db/apis/budget";
 import LoadingView from "../components/loadingView";
+import { formatLastUpdatedTime } from "../components/resuableFunctions";
 
 export default function DailyBudgetView({ route, navigation }) {
   const [expenseDetails, setExpenseDetails] = useState({
@@ -39,9 +40,10 @@ export default function DailyBudgetView({ route, navigation }) {
       if (key !== "id") {
         dailyExpenses.push({
           expenseName: key,
-          amount: value,
+          amount: value["amount"],
+          lastUpdatedTime: value["last_updated_time"],
         });
-        dayTotal += value;
+        dayTotal += value["amount"];
       }
     }
     setExpenseDetails({
@@ -76,6 +78,7 @@ export default function DailyBudgetView({ route, navigation }) {
                 <View style={Styles.expenseView}>
                   <Text style={Styles.expenseText}>{item.expenseName}</Text>
                   <Text style={Styles.expenseAmt}>{item.amount}</Text>
+                  <Text style={Styles.expenseLastUpdatedTime}>{formatLastUpdatedTime(item.lastUpdatedTime.seconds)}</Text>
                 </View>
               </Pressable>
             )}
@@ -135,6 +138,12 @@ const Styles = StyleSheet.create({
     // alignSelf: 'flex-end',
   },
   expenseAmt: {
+    fontSize: 20,
+    textAlign: "center",
+    textAlignVertical: "center",
+    // alignSelf: 'flex-end',
+  },
+  expenseLastUpdatedTime: {
     fontSize: 20,
     textAlign: "center",
     textAlignVertical: "center",
