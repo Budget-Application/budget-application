@@ -1,8 +1,7 @@
 export default function GetCompleteDate(activeDate) {
-  var date = activeDate.getDate();
-  var month = activeDate.getMonth() + 1;
+  var date = String(activeDate.getDate()).padStart(2, '0');
+  var month = String(activeDate.getMonth() + 1).padStart(2, '0');
   var year = activeDate.getFullYear();
-  // console.log(activeDate);
   return date + "-" + month + "-" + year; //format: dd-mm-yyyy;
 }
 

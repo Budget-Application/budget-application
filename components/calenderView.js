@@ -86,7 +86,6 @@ export default function BudgetCalendar({
   const [row, setRow] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   var matrix = null;
-  console.log(state.activeDate.getFullYear());
   var monthlyData = {};
 
   useEffect(async () => {
@@ -249,12 +248,12 @@ export default function BudgetCalendar({
     newActiveDate.setFullYear(state.activeDate.getFullYear());
     newActiveDate.setMonth(state.activeDate.getMonth());
     newActiveDate.setDate(item);
-
-    setState({ activeDate: newActiveDate });
-
-    navigation.navigate("Budget_day_view", {
-      date: GetCompleteDate(newActiveDate),
-    });
+    if (item.length > 0) {
+      setState({ activeDate: newActiveDate });
+      navigation.navigate("Budget_day_view", {
+        date: GetCompleteDate(newActiveDate),
+      });
+    }
   };
 
   const changeMonth = (n) => {
