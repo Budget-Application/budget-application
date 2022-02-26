@@ -251,7 +251,8 @@ export default function BudgetCalendar({
     if (item.length > 0) {
       setState({ activeDate: newActiveDate });
       navigation.navigate("Budget_day_view", {
-        date: GetCompleteDate(newActiveDate),
+        budget_id: budget_id,
+        selectedDate: GetCompleteDate(newActiveDate),
       });
     }
   };
