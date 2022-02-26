@@ -4,6 +4,7 @@ import YearView from "../screens/budgetYearScreen";
 import BudgetMonthView from "../screens/budgetMonthScreen";
 import DailyBudgetView from "../screens/budgetDailyScreen";
 import AddExpenseScreen from "../screens/addExpenseScreen";
+import GetCompleteDate from "../components/getCompletDate";
 
 const Drawer = createDrawerNavigator();
 
@@ -56,7 +57,14 @@ export default function BudgetDrawer({ route, navigation }) {
           selectedYear: parseInt(currentDate.getFullYear()),
         }}
       />
-      <Drawer.Screen name="Budget_day_view" component={DailyBudgetView} />
+      <Drawer.Screen
+        name="Budget_day_view"
+        component={DailyBudgetView}
+        initialParams={{
+          budget_id: route.params.id,
+          selectedDate: GetCompleteDate(currentDate),
+        }}
+      />
     </Drawer.Navigator>
   );
 }

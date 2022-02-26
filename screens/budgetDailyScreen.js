@@ -9,72 +9,97 @@ import {
 } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MyIcon from "../components/addFabIcon";
+import GetCompleteDate from "../components/getCompletDate";
+import { getDailyExpense } from "../db/apis/budget";
+import LoadingView from "../components/loadingView";
 
 export default function DailyBudgetView({ route, navigation }) {
-  const amount = 100;
-  console.log("Daily View", route.params);
-  const [dailyExpense, setDailyExpense] = useState([
-    { expenseName: "Rent", amount: 10 },
-    { expenseName: "Rent1", amount: 10 },
-    { expenseName: "Rent2", amount: 10 },
-    { expenseName: "Rent3", amount: 10 },
-    { expenseName: "Rent4", amount: 10 },
-    { expenseName: "Rent5", amount: 10 },
-    { expenseName: "Rent6", amount: 10 },
-    { expenseName: "Rent7", amount: 10 },
-    { expenseName: "Rent8", amount: 10 },
-    { expenseName: "Rent9", amount: 10 },
-    { expenseName: "Rent0", amount: 10 },
-    { expenseName: "Rent11", amount: 10 },
-    { expenseName: "Rent12", amount: 10 },
-    { expenseName: "Rent13", amount: 10 },
-  ]);
+  const [expenseDetails, setExpenseDetails] = useState({
+    selectedDate: GetCompleteDate(new Date()),
+    budgetId: null,
+    dayExpenses: [],
+    dayTotal: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect(()=>{
-  //   setDailyExpense({})
-  //   console.log("inside", route.params);
-  // }, [route.params]);
-  // console.log(route.params.homeStackNavigator.navigate);
+  useEffect(async () => {
+    setIsLoading(true);
+    await updateDayExpenseDetails(
+      route.params.budget_id,
+      route.params.selectedDate
+    );
+    setIsLoading(false);
+  }, [route.params]);
+
+  updateDayExpenseDetails = async (budgetId, selectedDate) => {
+    let expense = await getDailyExpense(budgetId, selectedDate);
+    let dailyExpenses = [];
+    let dayTotal = 0;
+    for (const [key, value] of Object.entries(expense)) {
+      if (key !== "id") {
+        dailyExpenses.push({
+          expenseName: key,
+          amount: value,
+        });
+        dayTotal += value;
+      }
+    }
+    setExpenseDetails({
+      selectedDate: selectedDate,
+      budgetId: budgetId,
+      dayExpenses: dailyExpenses,
+      dayTotal: dayTotal,
+    });
+  };
+
   return (
     <View style={Styles.container}>
-      <View style={Styles.header}>
-        <Text style={{ fontSize: 30, fontWeight: "bold" }}>
-          {route.params.date}
-        </Text>
-        <Text style={{ fontSize: 30, fontWeight: "bold", color: "#ff0000" }}>
-          {amount}
-        </Text>
-      </View>
-      <FlatList
-        data={dailyExpense}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <Pressable onPress={() => {}}>
-            <View style={Styles.expenseView}>
-              <Text style={Styles.expenseText}>{item.expenseName}</Text>
-              <Text style={Styles.expenseAmt}>{item.amount}</Text>
-            </View>
-          </Pressable>
-        )}
-        ItemSeparatorComponent={() => (
-          <View
-            style={{
-              height: 1,
-              backgroundColor: "#000",
-            }}
+      {isLoading ? (
+        <LoadingView />
+      ) : (
+        <View style={{ flex: 1 }}>
+          <View style={Styles.header}>
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+              {expenseDetails.selectedDate}
+            </Text>
+            <Text
+              style={{ fontSize: 30, fontWeight: "bold", color: "#ff0000" }}
+            >
+              {expenseDetails.dayTotal}
+            </Text>
+          </View>
+          <FlatList
+            data={expenseDetails.dayExpenses}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <Pressable onPress={() => {}}>
+                <View style={Styles.expenseView}>
+                  <Text style={Styles.expenseText}>{item.expenseName}</Text>
+                  <Text style={Styles.expenseAmt}>{item.amount}</Text>
+                </View>
+              </Pressable>
+            )}
+            ItemSeparatorComponent={() => (
+              <View
+                style={{
+                  height: 1,
+                  backgroundColor: "#000",
+                }}
+              />
+            )}
           />
-        )}
-      />
-      <View style={Styles.FabIcon}>
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => {
-            navigation.navigate("AddExpense");
-          }}
-        >
-          <MyIcon name={"plus"} size={50} color={"#ffffff"} />
-        </TouchableOpacity>
-      </View>
+          <View style={Styles.FabIcon}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => {
+                navigation.navigate("AddExpense");
+              }}
+            >
+              <MyIcon name={"plus"} size={50} color={"#ffffff"} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </View>
   );
 }

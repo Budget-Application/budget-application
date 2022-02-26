@@ -69,8 +69,6 @@ export default function YearView({ route, navigation }) {
     });
   };
 
-  const yearList = getYears();
-
   return (
     <View style={Styles.container}>
       {isLoading ? (
@@ -172,14 +170,14 @@ export default function YearView({ route, navigation }) {
                   </View>
                 </TouchableOpacity>
               )}
-              ItemSeparatorComponent={() => (
-                <View
-                  style={{
-                    height: 1,
-                    backgroundColor: "#000",
-                  }}
-                />
-              )}
+              // ItemSeparatorComponent={() => (
+              //   <View
+              //     style={{
+              //       height: 1,
+              //       backgroundColor: "#000",
+              //     }}
+              //   />
+              // )}
             />
           </View>
         </View>
