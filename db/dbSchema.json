@@ -20,14 +20,7 @@
         "seconds": 1644296400
       },
       "users": ["uid1", "uid2"],
-      "expense_categories": {
-        "expId1": {
-          "expense_name": "Ename1"
-        },
-        "expId2": {
-          "expense_name": "Ename2"
-        }
-      },
+      "expense_names": ["exp1", "exp2"],
       "yearly_expenses": {
         "1999": {
           "0-jan": 123,
@@ -48,17 +41,8 @@
       },
       "daily_expenses": {
         "23-05-1999": {
-          "daily_total": 100,
-          "expenses": {
-            "expId1": {
-              "expense_name": "Ename1",
-              "amount": 123
-            },
-            "expId2": {
-              "expense_name": "Ename2",
-              "amount": 113
-            }
-          }
+          "exp1": 100,
+          "exp2": 200
         }
       }
     }
