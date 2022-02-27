@@ -2,26 +2,33 @@ import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   FlatList,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
 import BudgetItem from "../components/budgetItem";
 import * as user from "../db/apis/user.js";
 import MyIcon from "../components/addFabIcon";
 import LoadingView from "../components/loadingView";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Home({ navigation }) {
   const [budgetData, setBudgetData] = useState([]);
+  const [userDetails, setUserDerails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const isFocused = useIsFocused();
+
+  useEffect(async () => {
+    const userDetails = await user.getUserDetails("testUser");
+    setUserDerails(userDetails);
+  }, []);
+
 
   useEffect(async () => {
     setIsLoading(true);
     const budgetList = await user.getUserBudgetList("testUser");
     setBudgetData(budgetList);
     setIsLoading(false);
-  }, []);
+  }, [isFocused]);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -38,14 +45,14 @@ export default function Home({ navigation }) {
               padding: 10,
             }}
           >
-            <MyIcon name={"search"} size={25} color={"#f0f0f0"} />
+            <MyIcon name={"search"} size={25} color={"#000"} />
           </TouchableOpacity>
           <TouchableOpacity
             style={{
               padding: 10,
             }}
           >
-            <MyIcon name={"more-vertical"} size={25} color={"#f0f0f0"} />
+            <MyIcon name={"more-vertical"} size={25} color={"#000"} />
           </TouchableOpacity>
         </View>
       ),
@@ -61,7 +68,7 @@ export default function Home({ navigation }) {
           keyExtractor={(item, index) => index.toString()}
           data={budgetData}
           renderItem={({ item }) => (
-            <BudgetItem item={item} navigation={navigation} />
+            <BudgetItem item={item} navigation={navigation} userDetails={userDetails}/>
           )}
           ItemSeparatorComponent={() => (
             <View

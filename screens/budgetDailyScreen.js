@@ -5,9 +5,9 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  Icon,
+  TouchableOpacity,
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { useIsFocused } from "@react-navigation/native";
 import MyIcon from "../components/addFabIcon";
 import GetCompleteDate from "../components/getCompletDate";
 import { getDailyExpense } from "../db/apis/budget";
@@ -21,6 +21,7 @@ export default function DailyBudgetView({ route, navigation }) {
     dayExpenses: [],
     dayTotal: 0,
   });
+  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(async () => {
@@ -30,7 +31,7 @@ export default function DailyBudgetView({ route, navigation }) {
       route.params.selectedDate
     );
     setIsLoading(false);
-  }, [route.params]);
+  }, [isFocused]);
 
   updateDayExpenseDetails = async (budgetId, selectedDate) => {
     let expense = await getDailyExpense(budgetId, selectedDate);
@@ -61,26 +62,36 @@ export default function DailyBudgetView({ route, navigation }) {
       ) : (
         <View style={{ flex: 1 }}>
           <View style={Styles.header}>
-            <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+            <Text style={Styles.selectedDate}>
               {expenseDetails.selectedDate}
             </Text>
-            <Text
-              style={{ fontSize: 30, fontWeight: "bold", color: "#ff0000" }}
-            >
+            <Text style={Styles.dayTotal}>
+              Day Total: {"\u20B9"}
               {expenseDetails.dayTotal}
             </Text>
           </View>
+
           <FlatList
             data={expenseDetails.dayExpenses}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <Pressable onPress={() => {}}>
-                <View style={Styles.expenseView}>
-                  <Text style={Styles.expenseText}>{item.expenseName}</Text>
-                  <Text style={Styles.expenseAmt}>{item.amount}</Text>
-                  <Text style={Styles.expenseLastUpdatedTime}>
-                    {formatLastUpdatedTime(item.lastUpdatedTime.seconds)}
-                  </Text>
+                <View style={Styles.expenseContainer}>
+                  <View style={Styles.expenseIcon}>
+                    <MyIcon name={"home"} color={"#fff"} size={30} />
+                  </View>
+                  <View style={Styles.expenseView}>
+                    <Text style={Styles.expenseText}>{item.expenseName}</Text>
+                    <Text style={Styles.expenseLastUpdatedTime}>
+                      {formatLastUpdatedTime(item.lastUpdatedTime.seconds)}
+                    </Text>
+                  </View>
+                  <View style={Styles.expenseAmtView}>
+                    <Text style={Styles.expenseAmt}>
+                      {"\u20B9"}
+                      {item.amount}
+                    </Text>
+                  </View>
                 </View>
               </Pressable>
             )}
@@ -115,45 +126,74 @@ export default function DailyBudgetView({ route, navigation }) {
 const Styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#61c100",
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    justifyContent: "center",
+    backgroundColor: "#f0f0f0",
   },
   header: {
-    // flex: 1,
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    flexDirection: "row",
-    backgroundColor: "#8000ff",
-    height: 40,
+    flexDirection: "column",
+    justifyContent: "center",
+    backgroundColor: "#d5f2ea",
   },
-  expenseView: {
-    flex: 1,
-    backgroundColor: "#408080",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    height: 70,
+  selectedDate:{
+    fontSize: 20,
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
+  dayTotal:{
+    color: "#808080",
+    textAlign: "center",
+    fontSize: 12,
   },
 
+  expenseContainer: {
+    flex: 3,
+    backgroundColor: "#f0f0f0",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+  },
+
+  expenseIcon: {
+    flex: 0.36,
+    backgroundColor: "#a7a7a7",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 100,
+  },
+  expenseView: {
+    flex: 1.64,
+    alignSelf: "flex-start",
+    backgroundColor: "#f0f0f0",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    paddingLeft: 10,
+  },
   expenseText: {
+    backgroundColor: "#f0f0f0",
     fontSize: 20,
     textAlign: "center",
     textAlignVertical: "center",
-    // alignSelf: 'flex-end',
+  },
+
+  expenseAmtView: {
+    flex: 1,
+    alignItems: "flex-end",
   },
   expenseAmt: {
-    fontSize: 20,
+    fontSize: 23,
     textAlign: "center",
     textAlignVertical: "center",
-    // alignSelf: 'flex-end',
   },
+
   expenseLastUpdatedTime: {
-    fontSize: 20,
+    color: "#808080",
+    fontSize: 12,
     textAlign: "center",
     textAlignVertical: "center",
-    // alignSelf: 'flex-end',
   },
+
   FabIcon: {
     backgroundColor: "red",
     width: 55,

@@ -12,6 +12,8 @@ import {
 import { getYearlyExpense } from "../db/apis/budget";
 import LoadingView from "../components/loadingView";
 import { MyAntIcon } from "../components/addFabIcon";
+import { useIsFocused } from "@react-navigation/native";
+
 
 function getYears() {
   var yearList = [];
@@ -30,6 +32,7 @@ export default function YearView({ route, navigation }) {
     yearExpense: {},
     yearTotal: 0,
   });
+  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
   const monthNames = [
     "January",
@@ -53,7 +56,7 @@ export default function YearView({ route, navigation }) {
       route.params.selectedYear
     );
     setIsLoading(false);
-  }, [route.params]);
+  }, [isFocused]);
 
   updateYearExpenseData = async (budgetId, selectedYear) => {
     let expense = await getYearlyExpense(budgetId, selectedYear);

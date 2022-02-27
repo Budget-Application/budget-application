@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import BudgetCalendar from "../components/calenderView";
+import { useIsFocused } from "@react-navigation/native";
 
 const monthNames = {
   "January": 0,
@@ -21,6 +22,7 @@ export default function BudgetMonthView({ route, navigation }) {
   const [state, setState] = useState({
     activeDate: new Date(),
   });
+  const isFocused = useIsFocused();
   useEffect(() => {
     if (route.params?.selectedYear) {
       var date = new Date();
@@ -28,7 +30,7 @@ export default function BudgetMonthView({ route, navigation }) {
       date.setMonth(monthNames[route.params.selectedMonth]);
       setState({ activeDate: date });
     }
-  }, [route.params]);
+  }, [isFocused]);
 
   return (
     <View style={style.container}>

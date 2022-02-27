@@ -6,6 +6,7 @@ import {
   Pressable,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import GetCompleteDate from "./getCompletDate";
 import { getMonthlyExpense } from "../db/apis/budget";
@@ -138,7 +139,7 @@ export default function BudgetCalendar({
       var rowItems = row.map((item, colIndex) => {
         var itemKey = rowIndex.toString() + colIndex.toString();
         return (
-          <Pressable
+          <TouchableOpacity
             key={itemKey}
             style={{
               // flex: 1,
@@ -153,7 +154,7 @@ export default function BudgetCalendar({
                 justifyContent: "center",
                 borderRadius: 50,
                 backgroundColor:
-                  item == state.activeDate.getDate() ? "#808080" : "#f0f0f0",
+                  item == state.activeDate.getDate() ? "#00f2aa" : "#f0f0f0",
                 marginVertical: "20%",
               }}
             >
@@ -196,7 +197,7 @@ export default function BudgetCalendar({
                   : ""}
               </Text>
             </View>
-          </Pressable>
+          </TouchableOpacity>
         );
       });
       return (
@@ -212,7 +213,7 @@ export default function BudgetCalendar({
             <MyIcon name={"arrow-left"} color={"#000000"} size={25} />
           </Pressable>
 
-          <Pressable
+          <TouchableOpacity
             onPress={() => {
               navigation.navigate("Budget_year_view", {
                 budget_id: budget_id,
@@ -225,7 +226,7 @@ export default function BudgetCalendar({
               {state.activeDate.getFullYear()} &ensp; - &ensp;
               <Text style={Styles.headerAmount}>{totalMonthAmount} </Text>
             </Text>
-          </Pressable>
+          </TouchableOpacity>
 
           <Pressable onPress={() => changeMonth(1)}>
             <MyIcon name={"arrow-right"} color={"#000000"} size={25} />
@@ -310,6 +311,7 @@ const Styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
+    backgroundColor: "#d5f2ea",
   },
   buttonIcon: {
     width: 30,

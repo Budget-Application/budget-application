@@ -3,8 +3,10 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import YearView from "../screens/budgetYearScreen";
 import BudgetMonthView from "../screens/budgetMonthScreen";
 import DailyBudgetView from "../screens/budgetDailyScreen";
-import AddExpenseScreen from "../screens/addExpenseScreen";
 import GetCompleteDate from "../components/getCompletDate";
+import CustomeDrawer from "../components/customDrawer";
+import MyAntIcon from "../components/addFabIcon";
+import MyIcon from "../components/addFabIcon";
 
 const Drawer = createDrawerNavigator();
 
@@ -24,12 +26,11 @@ const monthNames = {
 };
 
 export default function BudgetDrawer({ route, navigation }) {
-  // console.log("Budget Drawer");
-  // console.log(route.params);
   const currentDate = new Date();
   return (
     <Drawer.Navigator
       initialRouteName="Budget_month_view"
+      drawerContent={(props) => <CustomeDrawer userDetails={route.params.userDetails} props={props}/>}
       drawerType="front"
       overlayColor="#00000090"
       swipeEdgeWidth="300"
@@ -37,7 +38,13 @@ export default function BudgetDrawer({ route, navigation }) {
         backgroundColor: "#e6e6e6",
       }}
       screenOptions={{
-        headerShown: false,
+        headerTitle: route.params.budget_name,
+        headerStyle: {backgroundColor: "#00f2aa",},
+        headerBackgroundContainerStyle: {backgroundColor: "#d5f2ea",},
+        drawerActiveBackgroundColor: '#00f2aa',
+        drawerActiveTintColor: '#fff',
+        drawerInactiveTintColor: '#333',
+        drawerLabelStyle:{marginLeft: -25, fontWeight: "normal", fontSize: 15,}
       }}
     >
       <Drawer.Screen
@@ -48,6 +55,10 @@ export default function BudgetDrawer({ route, navigation }) {
           selectedYear: parseInt(currentDate.getFullYear()),
           selectedMonth: monthNames[currentDate.getMonth()],
         }}
+        options={{
+          title: "Monthly Expense",
+          drawerIcon: ({color}) => (<MyAntIcon name={"calendar"} size={20} color={color}/>)
+        }}
       />
       <Drawer.Screen
         name="Budget_year_view"
@@ -56,6 +67,10 @@ export default function BudgetDrawer({ route, navigation }) {
           budget_id: route.params.id,
           selectedYear: parseInt(currentDate.getFullYear()),
         }}
+        options={{
+          title: "Yearly Expense",
+          drawerIcon: ({color}) => (<MyIcon name={"align-justify"} size={20} color={color}/>)
+        }}
       />
       <Drawer.Screen
         name="Budget_day_view"
@@ -63,6 +78,10 @@ export default function BudgetDrawer({ route, navigation }) {
         initialParams={{
           budget_id: route.params.id,
           selectedDate: GetCompleteDate(currentDate),
+        }}
+        options={{
+          title: "Daily Expense",
+          drawerIcon: ({color}) => (<MyIcon name={"columns"} size={20} color={color}/>)
         }}
       />
     </Drawer.Navigator>

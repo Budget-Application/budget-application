@@ -15,9 +15,9 @@ export default function CreateNavigationContainer() {
         initialRouteName="Home"
         screenOptions={{
           headerStyle: {
-            backgroundColor: "grey",
+            backgroundColor: "#00f2aa",
           },
-          headerTintColor: "#fff",
+          headerTintColor: "#000",
           headerTitleAlign: "center",
         }}
       >
@@ -33,7 +33,7 @@ export default function CreateNavigationContainer() {
         <Stack.Screen
           name="BudgetDrawer"
           component={BudgetDrawer}
-          options={({ route }) => ({ title: route.params.budget_name })}
+          options={({ route }) => ({ title: route.params.budget_name, headerShown: false, })}
         />
         <Stack.Screen
           name="AddExpense"

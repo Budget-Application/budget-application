@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { formatLastUpdatedTime } from "./resuableFunctions";
 
-export default function BudgetItem({ item, navigation }) {
+export default function BudgetItem({ item, navigation, userDetails}) {
   const budgetPressHandler = () => {
-    navigation.navigate("BudgetDrawer", item);
+    navigation.navigate("BudgetDrawer", {...item, userDetails});
   };
 
   return (
@@ -22,7 +22,7 @@ export default function BudgetItem({ item, navigation }) {
             {item.budget_name}
           </Text>
           <Text style={Styles.budgetAmount}>
-            Expense Amount: {item.budget_total}{" "}
+            Expense Amount: {"\u20B9"}{item.budget_total}{" "}
           </Text>
         </View>
         <View style={Styles.lastTimeView}>
@@ -45,9 +45,9 @@ const Styles = StyleSheet.create({
   },
 
   budgetIconView: {
-    flex: 0.6,
+    flex: 0.12,
     height: "100%",
-    backgroundColor: "#a7a7a7",
+    backgroundColor: "#00f2aa",
     borderRadius: 100,
   },
   budgetIconText: {
@@ -58,7 +58,7 @@ const Styles = StyleSheet.create({
 
   budgetTextView: {
     marginLeft: 15,
-    flex: 3.4,
+    flex: 0.58,
     flexDirection: "column",
     justifyContent: "flex-start",
   },
@@ -74,8 +74,8 @@ const Styles = StyleSheet.create({
   },
 
   lastTimeView: {
-    flex: 1,
-    alignSelf: "flex-start", // to bottom "flex-end" - to top "flex-start"
+    flex: 0.3,
+    // alignSelf: "flex-start", // to bottom "flex-end" - to top "flex-start"
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
