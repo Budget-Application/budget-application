@@ -1,24 +1,71 @@
 import React, { useState, useLayoutEffect } from "react";
-import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
+import LoadingView from "../components/loadingView";
+import { addNewExpenseItem } from "../db/apis/budget";
 
 export default function AddExpenseScreen({ route, navigation }) {
-  const [expenseName, setExpenseName] = useState(null);
-  const [expenseAmt, setExpenseAmt] = useState(null);
+  const [expenseName, setExpenseName] = useState("");
+  const [expenseAmt, setExpenseAmt] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <Button
-          onPress={() =>
-            // navigation.setParams()
-            navigation.goBack({ expenseName, expenseAmt })
-          }
+          onPress={async () => {
+            if (!expenseName.trim()) {
+              Alert.alert("Empty Expense Name", "Please enter Expense Name", [
+                { text: "OK", onPress: () => console.log("OK Pressed") },
+              ]);
+            } else if (isNaN(expenseAmt) || isNaN(parseFloat(expenseAmt))) {
+              Alert.alert(
+                "Invalid Expense Amount",
+                "Please enter valid Amount",
+                [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+              );
+            } else {
+              setIsSaving(true);
+              const saveResponse = await addNewExpenseItem(
+                route.params.budgetId,
+                route.params.date,
+                { expenseName: expenseName, amount: parseFloat(expenseAmt) }
+              );
+              setIsSaving(false);
+              if (saveResponse) {
+                Alert.alert(
+                  "Request Successful",
+                  "Updated daily expense details.",
+                  [
+                    {
+                      text: "OK",
+                      onPress: () =>
+                        navigation.goBack({ expenseName, expenseAmt }),
+                    },
+                  ]
+                );
+              } else {
+                {
+                  Alert.alert(
+                    "Network Error",
+                    "Failed to save details.\nPlease try again later.",
+                    [
+                      {
+                        text: "OK",
+                        onPress: () =>
+                          navigation.goBack({ expenseName, expenseAmt }),
+                      },
+                    ]
+                  );
+                }
+              }
+            }
+          }}
           title="Save"
           color="#00cc00"
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, expenseName, expenseAmt]);
 
   return (
     <View style={Styles.container}>
@@ -27,7 +74,7 @@ export default function AddExpenseScreen({ route, navigation }) {
         placeholder="Expense Name"
         // placeholderTextColor={}
         value={expenseName}
-        onChangeText={setExpenseName}
+        onChangeText={(value) => setExpenseName(value)}
         keyboardType={"default"}
       />
       <TextInput
@@ -35,8 +82,9 @@ export default function AddExpenseScreen({ route, navigation }) {
         placeholder="Enter Amount"
         value={expenseAmt}
         keyboardType={"number-pad"}
-        onChangeText={setExpenseAmt}
+        onChangeText={(value) => setExpenseAmt(value)}
       />
+      {isSaving && <LoadingView> </LoadingView>}
     </View>
   );
 }

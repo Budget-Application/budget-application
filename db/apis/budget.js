@@ -46,6 +46,16 @@ export const getExpenseNames = async (budgetId) => {
   return expenseNames;
 };
 
+/**
+ * Function to add new expense for a date
+ * @param {String} budgetId - The budgetId to update details
+ * @param {String} date - The date to add expense. format: `01-01-2022`
+ * @param {Object} expenseData - The expense details to add. format `{expenseName: "exp3", amount: 1}`
+ */
+ export const addNewExpenseItem = async (budgetId, date, expenseData) => {
+  return await db.addNewExpenseItem(budgetId, date, expenseData);
+ }
+
 // const data = await getDailyExpense("2xhwmTxgiCraAWKRPYos", "26-02-2022");
 // console.log(data);
 // const data = await getExpenseNames("2xhwmTxgiCraAWKRPYos");

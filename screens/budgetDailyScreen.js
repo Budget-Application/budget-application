@@ -78,7 +78,9 @@ export default function DailyBudgetView({ route, navigation }) {
                 <View style={Styles.expenseView}>
                   <Text style={Styles.expenseText}>{item.expenseName}</Text>
                   <Text style={Styles.expenseAmt}>{item.amount}</Text>
-                  <Text style={Styles.expenseLastUpdatedTime}>{formatLastUpdatedTime(item.lastUpdatedTime.seconds)}</Text>
+                  <Text style={Styles.expenseLastUpdatedTime}>
+                    {formatLastUpdatedTime(item.lastUpdatedTime.seconds)}
+                  </Text>
                 </View>
               </Pressable>
             )}
@@ -95,7 +97,10 @@ export default function DailyBudgetView({ route, navigation }) {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {
-                navigation.navigate("AddExpense");
+                navigation.navigate("AddExpense", {
+                  budgetId: expenseDetails.budgetId,
+                  date: expenseDetails.selectedDate,
+                });
               }}
             >
               <MyIcon name={"plus"} size={50} color={"#ffffff"} />
