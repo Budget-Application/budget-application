@@ -3,11 +3,9 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { View, Text, ImageBackground, Image} from "react-native";
+import { View, Text, ImageBackground, Image } from "react-native";
 
-export default function CustomeDrawer({userDetails, props}){
-  console.log(userDetails);
-
+export default function CustomeDrawer({ userDetails, props }) {
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -16,36 +14,43 @@ export default function CustomeDrawer({userDetails, props}){
       >
         <ImageBackground
           source={require("../assets/images/drawer_bg_image.jpg")}
-          style={{ padding: 20, justifyContent: "flex-start", alignItems: "flex-start",}}
+          style={{
+            padding: 20,
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+          }}
         >
-            <Image 
-                source={require("../assets/images/user_image.png")}
-                style={{width: 60, height: 60, resizeMode: "contain", alignSelf: "flex-end",}}
-            />
-            <Text 
+          <Image
+            source={require("../assets/images/user_image.png")}
             style={{
-              color: '#ffffff',
+              width: 60,
+              height: 60,
+              resizeMode: "contain",
+              alignSelf: "flex-end",
+            }}
+          />
+          <Text
+            style={{
+              color: "#ffffff",
               fontSize: 18,
               marginBottom: 5,
             }}
-            >
-              {userDetails.name}
-            </Text>
-            <Text 
+          >
+            {userDetails.name}
+          </Text>
+          <Text
             style={{
-              color: '#ffffff',
+              color: "#ffffff",
               fontSize: 18,
             }}
-            >
-              {userDetails.phone_no}
-            </Text>
-
+          >
+            {userDetails.phone_no}
+          </Text>
         </ImageBackground>
-        <View style={{backgroundColor: "#d5f2ea", flex: 1, padding: 10,}}>
-        <DrawerItemList {...props} />
+        <View style={{ backgroundColor: "#d5f2ea", flex: 1, padding: 10 }}>
+          <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
     </View>
   );
-};
-
+}

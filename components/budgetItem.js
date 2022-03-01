@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { formatLastUpdatedTime } from "./resuableFunctions";
 
-export default function BudgetItem({ item, navigation, userDetails}) {
+export default function BudgetItem({ item, navigation, userDetails }) {
   const budgetPressHandler = () => {
-    navigation.navigate("BudgetDrawer", {...item, userDetails});
+    navigation.navigate("BudgetDrawer", { ...item, userDetails });
   };
 
   return (
@@ -22,7 +22,8 @@ export default function BudgetItem({ item, navigation, userDetails}) {
             {item.budget_name}
           </Text>
           <Text style={Styles.budgetAmount}>
-            Expense Amount: {"\u20B9"}{item.budget_total}{" "}
+            Expense Amount: {"\u20B9"}
+            {item.budget_total}{" "}
           </Text>
         </View>
         <View style={Styles.lastTimeView}>

@@ -4,8 +4,6 @@ import {
   View,
   Text,
   Pressable,
-  Image,
-  Dimensions,
   TouchableOpacity,
 } from "react-native";
 import GetCompleteDate from "./getCompletDate";

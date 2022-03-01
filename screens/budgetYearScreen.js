@@ -14,7 +14,6 @@ import LoadingView from "../components/loadingView";
 import { MyAntIcon } from "../components/addFabIcon";
 import { useIsFocused } from "@react-navigation/native";
 
-
 function getYears() {
   var yearList = [];
   currentYear = parseInt(new Date().getFullYear());

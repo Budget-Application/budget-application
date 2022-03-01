@@ -30,7 +30,9 @@ export default function BudgetDrawer({ route, navigation }) {
   return (
     <Drawer.Navigator
       initialRouteName="Budget_month_view"
-      drawerContent={(props) => <CustomeDrawer userDetails={route.params.userDetails} props={props}/>}
+      drawerContent={(props) => (
+        <CustomeDrawer userDetails={route.params.userDetails} props={props} />
+      )}
       drawerType="front"
       overlayColor="#00000090"
       swipeEdgeWidth="300"
@@ -39,12 +41,16 @@ export default function BudgetDrawer({ route, navigation }) {
       }}
       screenOptions={{
         headerTitle: route.params.budget_name,
-        headerStyle: {backgroundColor: "#00f2aa",},
-        headerBackgroundContainerStyle: {backgroundColor: "#d5f2ea",},
-        drawerActiveBackgroundColor: '#00f2aa',
-        drawerActiveTintColor: '#fff',
-        drawerInactiveTintColor: '#333',
-        drawerLabelStyle:{marginLeft: -25, fontWeight: "normal", fontSize: 15,}
+        headerStyle: { backgroundColor: "#d5f2ea" },
+        headerBackgroundContainerStyle: { backgroundColor: "#d5f2ea" },
+        drawerActiveBackgroundColor: "#00f2aa",
+        drawerActiveTintColor: "#fff",
+        drawerInactiveTintColor: "#333",
+        drawerLabelStyle: {
+          marginLeft: -25,
+          fontWeight: "normal",
+          fontSize: 15,
+        },
       }}
     >
       <Drawer.Screen
@@ -57,7 +63,9 @@ export default function BudgetDrawer({ route, navigation }) {
         }}
         options={{
           title: "Monthly Expense",
-          drawerIcon: ({color}) => (<MyAntIcon name={"calendar"} size={20} color={color}/>)
+          drawerIcon: ({ color }) => (
+            <MyAntIcon name={"calendar"} size={20} color={color} />
+          ),
         }}
       />
       <Drawer.Screen
@@ -69,7 +77,9 @@ export default function BudgetDrawer({ route, navigation }) {
         }}
         options={{
           title: "Yearly Expense",
-          drawerIcon: ({color}) => (<MyIcon name={"align-justify"} size={20} color={color}/>)
+          drawerIcon: ({ color }) => (
+            <MyIcon name={"align-justify"} size={20} color={color} />
+          ),
         }}
       />
       <Drawer.Screen
@@ -81,7 +91,9 @@ export default function BudgetDrawer({ route, navigation }) {
         }}
         options={{
           title: "Daily Expense",
-          drawerIcon: ({color}) => (<MyIcon name={"columns"} size={20} color={color}/>)
+          drawerIcon: ({ color }) => (
+            <MyIcon name={"columns"} size={20} color={color} />
+          ),
         }}
       />
     </Drawer.Navigator>

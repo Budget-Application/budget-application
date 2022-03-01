@@ -1,5 +1,5 @@
-import React, { useState, useLayoutEffect } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Alert } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, TextInput, Button, Alert } from "react-native";
 import LoadingView from "../components/loadingView";
 import { addNewExpenseItem } from "../db/apis/budget";
 
@@ -10,6 +10,15 @@ export default function AddExpenseScreen({ route, navigation }) {
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
+      headerLeft: () => (
+        <Button
+          title="Cancel"
+          color={"#00f2aa"}
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      ),
       headerRight: () => (
         <Button
           onPress={async () => {
@@ -38,8 +47,7 @@ export default function AddExpenseScreen({ route, navigation }) {
                   [
                     {
                       text: "OK",
-                      onPress: () =>
-                        navigation.goBack({ expenseName, expenseAmt }),
+                      onPress: () => navigation.goBack(),
                     },
                   ]
                 );
@@ -51,8 +59,7 @@ export default function AddExpenseScreen({ route, navigation }) {
                     [
                       {
                         text: "OK",
-                        onPress: () =>
-                          navigation.goBack({ expenseName, expenseAmt }),
+                        onPress: () => navigation.goBack(),
                       },
                     ]
                   );
@@ -61,7 +68,7 @@ export default function AddExpenseScreen({ route, navigation }) {
             }
           }}
           title="Save"
-          color="#00cc00"
+          color="#00f2aa"
         />
       ),
     });
@@ -70,9 +77,8 @@ export default function AddExpenseScreen({ route, navigation }) {
   return (
     <View style={Styles.container}>
       <TextInput
-        style={Styles.expenseName}
+        style={[Styles.expenseName]}
         placeholder="Expense Name"
-        // placeholderTextColor={}
         value={expenseName}
         onChangeText={(value) => setExpenseName(value)}
         keyboardType={"default"}
@@ -91,39 +97,26 @@ export default function AddExpenseScreen({ route, navigation }) {
 
 const Styles = StyleSheet.create({
   container: {
-    // padding: 24,
     flex: 1,
-    // justifyContent: 'space-around',
-    // alignItems: 'stretch',
   },
   expenseName: {
-    // width: "100%",
     height: 60,
-    // backgroundColor: '#8080ff',
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: "normal",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-
-    // flex: 1,
-    // borderWidth: 1,
+    borderBottomColor: "#c0c0c0",
     borderBottomWidth: 1,
-    borderRadius: 10,
   },
   expenseAmt: {
-    // width: "100%",
     height: 60,
-    // backgroundColor: '#8080ff',
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: "normal",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-
-    // flex: 1,
-    // borderWidth: 1,
+    borderBottomColor: "#c0c0c0",
     borderBottomWidth: 1,
-    borderRadius: 10,
   },
 });

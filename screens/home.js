@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
 import BudgetItem from "../components/budgetItem";
 import * as user from "../db/apis/user.js";
 import MyIcon from "../components/addFabIcon";
@@ -21,7 +16,6 @@ export default function Home({ navigation }) {
     const userDetails = await user.getUserDetails("testUser");
     setUserDerails(userDetails);
   }, []);
-
 
   useEffect(async () => {
     setIsLoading(true);
@@ -68,13 +62,16 @@ export default function Home({ navigation }) {
           keyExtractor={(item, index) => index.toString()}
           data={budgetData}
           renderItem={({ item }) => (
-            <BudgetItem item={item} navigation={navigation} userDetails={userDetails}/>
+            <BudgetItem
+              item={item}
+              navigation={navigation}
+              userDetails={userDetails}
+            />
           )}
           ItemSeparatorComponent={() => (
             <View
               style={{
-                alignSelf: "flex-end",
-                width: "83%",
+                marginLeft: "17.5%",
                 height: 1,
                 backgroundColor: "#c0c0c0",
               }}

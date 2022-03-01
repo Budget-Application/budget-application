@@ -1,10 +1,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Button } from "react-native";
 import Home from "../screens/home";
 import BudgetDrawer from "./budgetDrawer";
 import AddExpenseScreen from "../screens/addExpenseScreen";
-import MyIcon from "../components/addFabIcon";
 
 const Stack = createStackNavigator();
 
@@ -15,7 +13,7 @@ export default function CreateNavigationContainer() {
         initialRouteName="Home"
         screenOptions={{
           headerStyle: {
-            backgroundColor: "#00f2aa",
+            backgroundColor: "#d5f2ea",
           },
           headerTintColor: "#000",
           headerTitleAlign: "center",
@@ -33,14 +31,16 @@ export default function CreateNavigationContainer() {
         <Stack.Screen
           name="BudgetDrawer"
           component={BudgetDrawer}
-          options={({ route }) => ({ title: route.params.budget_name, headerShown: false, })}
+          options={({ route }) => ({
+            title: route.params.budget_name,
+            headerShown: false,
+          })}
         />
         <Stack.Screen
           name="AddExpense"
           component={AddExpenseScreen}
           options={{
             headerRightContainerStyle: { paddingRight: 20 },
-            headerBackImage: () => <MyIcon name={"x"} />,
             headerLeftContainerStyle: { paddingLeft: 5 },
           }}
         />

@@ -98,8 +98,9 @@ export default function DailyBudgetView({ route, navigation }) {
             ItemSeparatorComponent={() => (
               <View
                 style={{
+                  marginLeft: "16%",
                   height: 1,
-                  backgroundColor: "#000",
+                  backgroundColor: "#c0c0c0",
                 }}
               />
             )}
@@ -114,7 +115,7 @@ export default function DailyBudgetView({ route, navigation }) {
                 });
               }}
             >
-              <MyIcon name={"plus"} size={50} color={"#ffffff"} />
+              <MyIcon name={"plus"} size={40} color={"#fff"} />
             </TouchableOpacity>
           </View>
         </View>
@@ -134,12 +135,12 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#d5f2ea",
   },
-  selectedDate:{
+  selectedDate: {
     fontSize: 20,
     textAlign: "center",
     textAlignVertical: "center",
   },
-  dayTotal:{
+  dayTotal: {
     color: "#808080",
     textAlign: "center",
     fontSize: 12,
@@ -156,7 +157,7 @@ const Styles = StyleSheet.create({
 
   expenseIcon: {
     flex: 0.36,
-    backgroundColor: "#a7a7a7",
+    backgroundColor: "#00f2aa",
     height: "100%",
     justifyContent: "center",
     alignItems: "center",
@@ -195,14 +196,15 @@ const Styles = StyleSheet.create({
   },
 
   FabIcon: {
-    backgroundColor: "red",
-    width: 55,
-    height: 55,
+    backgroundColor: "#00f2aa",
+    width: "15%",
+    height: "7.5%",
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
     bottom: 50,
-    right: 10,
+    right: 20,
     borderRadius: 100,
+    elevation: 5,
   },
 });

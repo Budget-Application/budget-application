@@ -10,7 +10,7 @@ export default function LoadingView() {
 
 const Styles = StyleSheet.create({
   loading: {
-    flex:1,
-    justifyContent: "center"
+    flex: 1,
+    justifyContent: "center",
   },
 });
