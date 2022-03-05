@@ -10,3 +10,7 @@ budgetScreen.js show calendar view (from components) of selected budget
 Test Cases: 
     1. Font Size dynamic based on height and width of screen.
     3. Sckeleton Animation on loading in all screens.
+
+LookUp:
+    Margin Value to percentage.
+    Padding Value to percentage.

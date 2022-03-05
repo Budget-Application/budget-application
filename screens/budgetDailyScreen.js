@@ -5,7 +5,9 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
+  Modal,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import MyIcon from "../components/addFabIcon";
@@ -13,6 +15,7 @@ import GetCompleteDate from "../components/getCompletDate";
 import { getDailyExpense } from "../db/apis/budget";
 import LoadingView from "../components/loadingView";
 import { formatLastUpdatedTime } from "../components/resuableFunctions";
+import CustomButton from "../components/customButton";
 
 export default function DailyBudgetView({ route, navigation }) {
   const [expenseDetails, setExpenseDetails] = useState({
@@ -20,6 +23,11 @@ export default function DailyBudgetView({ route, navigation }) {
     budgetId: null,
     dayExpenses: [],
     dayTotal: 0,
+  });
+  const [updateModalVisible, setUpdateModelVisible] = useState({
+    visible: false,
+    expenseName: "",
+    expenseAmt: 0,
   });
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
@@ -70,12 +78,67 @@ export default function DailyBudgetView({ route, navigation }) {
               {expenseDetails.dayTotal}
             </Text>
           </View>
-
+          <Modal
+            animationType="fade"
+            transparent
+            visible={updateModalVisible.visible}
+            onRequestClose={() =>
+              setUpdateModelVisible({
+                visible: false,
+                expenseName: "",
+                expenseAmt: 0,
+              })
+            }
+          >
+            <View style={Styles.centered_view}>
+              <View style={Styles.modal}>
+                <View style={Styles.expenseNameModal}>
+                  <Text style={Styles.expenseLabel}>Name</Text>
+                  <Text style={Styles.modelExpenseText}>
+                    {updateModalVisible.expenseName}
+                  </Text>
+                </View>
+                <View style={Styles.expenseNameModal}>
+                  <Text style={Styles.expenseLabel}>Amount</Text>
+                  <Text style={Styles.modelExpenseText}>
+                    {updateModalVisible.expenseAmt}
+                  </Text>
+                </View>
+                <View style={Styles.expenseNewAmtModal}>
+                  <View style={Styles.expenseModalIcon}>
+                    <MyIcon name="minus" color="#ffffff" />
+                  </View>
+                  <TextInput style={Styles.expenseNewAmt} />
+                  <View style={Styles.expenseModalIcon}>
+                    <MyIcon name="plus" color="#ffffff" />
+                  </View>
+                </View>
+                <View style={Styles.expenseModalButtonView}>
+                  <CustomButton title={"Cancel"} />
+                  <CustomButton title={"Save"} />
+                </View>
+              </View>
+            </View>
+          </Modal>
           <FlatList
             data={expenseDetails.dayExpenses}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <Pressable onPress={() => {}}>
+              <Pressable
+                onPress={() => {
+                  console.log(
+                    "item.expenseName=",
+                    item.expenseName,
+                    " item.expenseAmt",
+                    item.expenseAmt
+                  );
+                  setUpdateModelVisible({
+                    visible: true,
+                    expenseName: item.expenseName,
+                    expenseAmt: item.amount,
+                  });
+                }}
+              >
                 <View style={Styles.expenseContainer}>
                   <View style={Styles.expenseIcon}>
                     <MyIcon name={"home"} color={"#fff"} size={30} />
@@ -135,6 +198,64 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#d5f2ea",
   },
+
+  centered_view: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#00000099",
+  },
+  modal: {
+    position: "absolute",
+    justifyContent: "space-evenly",
+    backgroundColor: "#f0f0f0",
+    borderColor: "#000",
+    borderRadius: 20,
+  },
+  expenseNameModal: {
+    // flex: 1,
+    height: "18%",
+    margin: "5%",
+    justifyContent: "center",
+  },
+  expenseLabel: {
+    color: "#808080",
+    fontSize: 15,
+  },
+  modelExpenseText: {
+    height: "100%",
+    // textAlign: "center",
+    textAlignVertical: "center",
+    fontSize: 25,
+    borderWidth: 1,
+    borderColor: "#808080",
+    paddingHorizontal: "3%",
+  },
+  expenseNewAmtModal: {
+    height: "15%",
+    margin: "5%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  expenseModalIcon: {
+    elevation: 5,
+    borderRadius: 100,
+    backgroundColor: "#aaaaaa",
+  },
+  expenseNewAmt: {
+    borderWidth: 1,
+    width: "50%",
+    height: "100%",
+  },
+
+  expenseModalButtonView: {
+    flex: 1,
+    marginBottom: "5%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+
   selectedDate: {
     fontSize: 20,
     textAlign: "center",
