@@ -8,6 +8,7 @@ import {
   Modal,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import MyIcon from "../components/addFabIcon";
@@ -16,6 +17,7 @@ import { getDailyExpense } from "../db/apis/budget";
 import LoadingView from "../components/loadingView";
 import { formatLastUpdatedTime } from "../components/resuableFunctions";
 import CustomButton from "../components/customButton";
+import { addNewExpenseItem } from "../db/apis/budget";
 
 export default function DailyBudgetView({ route, navigation }) {
   const [expenseDetails, setExpenseDetails] = useState({
@@ -24,14 +26,15 @@ export default function DailyBudgetView({ route, navigation }) {
     dayExpenses: [],
     dayTotal: 0,
   });
+  const [newDayAmt, setNewDayAmt] = useState("0");
   const [updateModalVisible, setUpdateModelVisible] = useState({
     visible: false,
     expenseName: "",
     expenseAmt: 0,
   });
+
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(async () => {
     setIsLoading(true);
     await updateDayExpenseDetails(
@@ -82,13 +85,14 @@ export default function DailyBudgetView({ route, navigation }) {
             animationType="fade"
             transparent
             visible={updateModalVisible.visible}
-            onRequestClose={() =>
+            onRequestClose={() => {
               setUpdateModelVisible({
                 visible: false,
                 expenseName: "",
                 expenseAmt: 0,
-              })
-            }
+              });
+              setNewDayAmt("0");
+            }}
           >
             <View style={Styles.centered_view}>
               <View style={Styles.modal}>
@@ -101,21 +105,95 @@ export default function DailyBudgetView({ route, navigation }) {
                 <View style={Styles.expenseNameModal}>
                   <Text style={Styles.expenseLabel}>Amount</Text>
                   <Text style={Styles.modelExpenseText}>
+                    {"\u20B9"}
                     {updateModalVisible.expenseAmt}
                   </Text>
                 </View>
                 <View style={Styles.expenseNewAmtModal}>
-                  <View style={Styles.expenseModalIcon}>
-                    <MyIcon name="minus" color="#ffffff" />
-                  </View>
-                  <TextInput style={Styles.expenseNewAmt} />
-                  <View style={Styles.expenseModalIcon}>
-                    <MyIcon name="plus" color="#ffffff" />
-                  </View>
+                  <TouchableOpacity
+                    disabled={isNaN(newDayAmt) || newDayAmt.length == 0}
+                    onPress={() => {
+                      setNewDayAmt(
+                        isNaN(newDayAmt) || newDayAmt.length == 0
+                          ? "0"
+                          : String(parseInt(newDayAmt) - 1)
+                      );
+                    }}
+                  >
+                    <View style={Styles.expenseModalIcon}>
+                      <MyIcon name="minus" color="#ffffff" />
+                    </View>
+                  </TouchableOpacity>
+                  <TextInput
+                    style={Styles.expenseNewAmt}
+                    keyboardType="decimal-pad"
+                    value={newDayAmt}
+                    onChangeText={(Amt) => {
+                      setNewDayAmt(Amt);
+                    }}
+                  />
+                  <TouchableOpacity
+                    disabled={isNaN(newDayAmt) || newDayAmt.length == 0}
+                    onPress={() => {
+                      setNewDayAmt(String(parseInt(newDayAmt) + 1));
+                    }}
+                  >
+                    <View style={Styles.expenseModalIcon}>
+                      <MyIcon name="plus" color="#ffffff" />
+                    </View>
+                  </TouchableOpacity>
                 </View>
+                <Text style={{ textAlign: "center", color: "#808080" }}>
+                  Total Amount: {"\u20B9"}
+                  {(isNaN(newDayAmt) || newDayAmt.length == 0
+                    ? 0
+                    : parseInt(newDayAmt)) + updateModalVisible.expenseAmt}
+                </Text>
                 <View style={Styles.expenseModalButtonView}>
-                  <CustomButton title={"Cancel"} />
-                  <CustomButton title={"Save"} />
+                  <CustomButton
+                    title={"Cancel"}
+                    onPress={() => {
+                      setUpdateModelVisible({
+                        visible: false,
+                        expenseName: "",
+                        expenseAmt: 0,
+                      });
+                      setNewDayAmt("0");
+                    }}
+                  />
+                  <CustomButton
+                    title={"Save"}
+                    onPress={async () => {
+                      if (isNaN(newDayAmt) || isNaN(parseFloat(newDayAmt))) {
+                        Alert.alert(
+                          "Invalid Expense Amount",
+                          "Please enter valid Amount",
+                          [{ text: "OK" }]
+                        );
+                      } else {
+                        setIsLoading(true);
+                        const saveResponse = await addNewExpenseItem(
+                          expenseDetails.budgetId,
+                          expenseDetails.selectedDate,
+                          {
+                            expenseName: updateModalVisible.expenseName,
+                            amount: parseFloat(newDayAmt),
+                          }
+                        );
+                        setNewDayAmt("0");
+                        setUpdateModelVisible({
+                          visible: false,
+                          expenseName: "",
+                          expenseAmt: 0,
+                        });
+                        await updateDayExpenseDetails(
+                          route.params.budget_id,
+                          route.params.selectedDate
+                        );
+                        setIsLoading(false);
+                      }
+                    }}
+                  />
                 </View>
               </View>
             </View>
@@ -126,12 +204,6 @@ export default function DailyBudgetView({ route, navigation }) {
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => {
-                  console.log(
-                    "item.expenseName=",
-                    item.expenseName,
-                    " item.expenseAmt",
-                    item.expenseAmt
-                  );
                   setUpdateModelVisible({
                     visible: true,
                     expenseName: item.expenseName,
@@ -211,25 +283,28 @@ const Styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     borderColor: "#000",
     borderRadius: 20,
+    paddingTop: "5%",
   },
   expenseNameModal: {
-    // flex: 1,
-    height: "18%",
+    height: "16%",
     margin: "5%",
     justifyContent: "center",
   },
   expenseLabel: {
     color: "#808080",
     fontSize: 15,
+    marginBottom: "1%",
+    marginLeft: "5%",
   },
   modelExpenseText: {
     height: "100%",
-    // textAlign: "center",
     textAlignVertical: "center",
     fontSize: 25,
     borderWidth: 1,
     borderColor: "#808080",
+    borderRadius: 100,
     paddingHorizontal: "3%",
+    color: "#808080",
   },
   expenseNewAmtModal: {
     height: "15%",
@@ -245,13 +320,17 @@ const Styles = StyleSheet.create({
   },
   expenseNewAmt: {
     borderWidth: 1,
+    paddingHorizontal: "3%",
     width: "50%",
     height: "100%",
+    borderRadius: 100,
+    borderColor: "#808080",
+    fontSize: 25,
   },
 
   expenseModalButtonView: {
     flex: 1,
-    marginBottom: "5%",
+    marginVertical: "5%",
     flexDirection: "row",
     justifyContent: "space-evenly",
   },

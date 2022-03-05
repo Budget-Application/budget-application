@@ -14,7 +14,9 @@ const Styles = StyleSheet.create({
     backgroundColor: "#00f2aa",
     justifyContent: "center",
     width: "30%",
+    height: "80%",
     elevation: 10,
+    borderRadius: 20,
   },
   buttonText: {
     textAlign: "center",
