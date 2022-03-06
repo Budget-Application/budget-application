@@ -4,6 +4,8 @@ import Home from "../screens/home";
 import BudgetDrawer from "./budgetDrawer";
 import AddExpenseScreen from "../screens/addExpenseScreen";
 import ProfileScreen from "../screens/profileScreen";
+import LoginScreen from "../screens/userAuthScreens/LoginScreen";
+import UserDetails from "../screens/userAuthScreens/UserDetails";
 
 const Stack = createStackNavigator();
 
@@ -11,7 +13,7 @@ export default function CreateNavigationContainer() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
+        initialRouteName="Login"
         screenOptions={{
           headerStyle: {
             backgroundColor: "#d5f2ea",
@@ -52,6 +54,14 @@ export default function CreateNavigationContainer() {
             title: "Profile",
           }}
         />
+        <Stack.Screen
+          name="UserDetails"
+          component={UserDetails}
+          options={{
+            title: "Details",
+          }}
+        />
+        <Stack.Screen name="Login" component={LoginScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

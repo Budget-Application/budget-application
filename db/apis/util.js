@@ -52,7 +52,6 @@ export const getDocuments = async (collectionPath) => {
 export const addNewExpenseItem = async (budgetId, date, expenseData) => {
   let [day, month, year] = date.split("-");
   day = parseInt(day);
-  console.log("day: ", day, "month: ", month, "year: ", year);
   const [dayPath, monthPath, yearPath, budgetPath] = [
     `budgets/${budgetId}/daily_expenses/${date}`,
     `budgets/${budgetId}/monthly_expenses/${month + "-" + year}`,
@@ -67,7 +66,6 @@ export const addNewExpenseItem = async (budgetId, date, expenseData) => {
   ];
   try {
     const response = await runTransaction(db, async (transaction) => {
-      console.log("ServerTimeStamp: ", serverTimestamp());
       const [dayDoc, monthDoc, yearDoc, budgetDoc] = [
         await transaction.get(dayRef),
         await transaction.get(monthRef),
@@ -86,7 +84,6 @@ export const addNewExpenseItem = async (budgetId, date, expenseData) => {
         amount: expenseAmount,
         last_updated_time: serverTimestamp(),
       };
-      // console.log("dayExpenseItem: ",dayExpenseItem);
       transaction.set(dayRef, dayExpenseItem, { merge: true });
 
       const monthExpenseItem = {};
@@ -95,7 +92,6 @@ export const addNewExpenseItem = async (budgetId, date, expenseData) => {
           ? monthDoc.data()[day] + expenseData.amount
           : expenseData.amount
         : expenseData.amount;
-      // console.log("monthExpenseItem: ", monthExpenseItem);
       transaction.set(monthRef, monthExpenseItem, { merge: true });
 
       const yearExpenseItem = {};

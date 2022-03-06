@@ -55,8 +55,3 @@ export const getExpenseNames = async (budgetId) => {
  export const addNewExpenseItem = async (budgetId, date, expenseData) => {
   return await db.addNewExpenseItem(budgetId, date, expenseData);
  }
-
-// const data = await getDailyExpense("2xhwmTxgiCraAWKRPYos", "26-02-2022");
-// console.log(data);
-// const data = await getExpenseNames("2xhwmTxgiCraAWKRPYos");
-// console.log(data);

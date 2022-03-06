@@ -24,13 +24,13 @@ export default function AddExpenseScreen({ route, navigation }) {
           onPress={async () => {
             if (!expenseName.trim()) {
               Alert.alert("Empty Expense Name", "Please enter Expense Name", [
-                { text: "OK", onPress: () => console.log("OK Pressed") },
+                { text: "OK" },
               ]);
             } else if (isNaN(expenseAmt) || isNaN(parseFloat(expenseAmt))) {
               Alert.alert(
                 "Invalid Expense Amount",
                 "Please enter valid Amount",
-                [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+                [{ text: "OK" }]
               );
             } else {
               setIsSaving(true);

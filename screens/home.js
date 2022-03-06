@@ -6,7 +6,7 @@ import MyIcon from "../components/addFabIcon";
 import LoadingView from "../components/loadingView";
 import { useIsFocused } from "@react-navigation/native";
 
-export default function Home({ navigation }) {
+export default function Home({route, navigation }) {
   const [budgetData, setBudgetData] = useState([]);
   const [userDetails, setUserDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
