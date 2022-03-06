@@ -3,9 +3,10 @@ import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import { View, Text, ImageBackground, Image } from "react-native";
+import { View, Text, ImageBackground, Image, Pressable } from "react-native";
 
-export default function CustomeDrawer({ userDetails, props }) {
+export default function CustomeDrawer({ userDetails, props, navigation }) {
+  console.log(navigation);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView
@@ -17,18 +18,24 @@ export default function CustomeDrawer({ userDetails, props }) {
           style={{
             padding: 20,
             justifyContent: "flex-start",
-            alignItems: "flex-start",
+            alignItems: "flex-end",
           }}
         >
-          <Image
-            source={require("../assets/images/user_image.png")}
-            style={{
-              width: 60,
-              height: 60,
-              resizeMode: "contain",
-              alignSelf: "flex-end",
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Profile", { userDetails });
             }}
-          />
+          >
+            <Image
+              source={require("../assets/images/user_image.png")}
+              style={{
+                width: 60,
+                height: 60,
+                resizeMode: "contain",
+                alignSelf: "flex-end",
+              }}
+            />
+          </Pressable>
           <Text
             style={{
               color: "#ffffff",

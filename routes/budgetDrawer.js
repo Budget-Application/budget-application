@@ -31,7 +31,11 @@ export default function BudgetDrawer({ route, navigation }) {
     <Drawer.Navigator
       initialRouteName="Budget_month_view"
       drawerContent={(props) => (
-        <CustomeDrawer userDetails={route.params.userDetails} props={props} />
+        <CustomeDrawer
+          userDetails={route.params.userDetails}
+          props={props}
+          navigation={navigation}
+        />
       )}
       drawerType="front"
       overlayColor="#00000090"

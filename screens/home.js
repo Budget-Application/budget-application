@@ -8,13 +8,13 @@ import { useIsFocused } from "@react-navigation/native";
 
 export default function Home({ navigation }) {
   const [budgetData, setBudgetData] = useState([]);
-  const [userDetails, setUserDerails] = useState(null);
+  const [userDetails, setUserDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const isFocused = useIsFocused();
 
   useEffect(async () => {
-    const userDetails = await user.getUserDetails("testUser");
-    setUserDerails(userDetails);
+    const userDetailsDB = await user.getUserDetails("testUser");
+    setUserDetails(userDetailsDB);
   }, []);
 
   useEffect(async () => {
@@ -45,13 +45,16 @@ export default function Home({ navigation }) {
             style={{
               padding: 10,
             }}
+            onPress={() => {
+              navigation.navigate("Profile", { userDetails });
+            }}
           >
             <MyIcon name={"more-vertical"} size={25} color={"#000"} />
           </TouchableOpacity>
         </View>
       ),
     });
-  }, [navigation]);
+  }, [userDetails]);
 
   return (
     <View style={Styles.container}>
