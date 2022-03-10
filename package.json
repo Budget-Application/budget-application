@@ -27,6 +27,7 @@
     "react-dom": "17.0.1",
     "react-native": "0.64.3",
     "react-native-calendars": "^1.1277.0",
+    "react-native-contacts": "^7.0.4",
     "react-native-gesture-handler": "~2.1.0",
     "react-native-phone-number-input": "^2.1.0",
     "react-native-reanimated": "~2.3.1",
@@ -35,7 +36,8 @@
     "react-native-web": "0.17.1",
     "react-native-webview": "11.15.0",
     "react-navigation": "^4.4.4",
-    "react-navigation-stack": "^2.10.4"
+    "react-navigation-stack": "^2.10.4",
+    "expo-contacts": "~10.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

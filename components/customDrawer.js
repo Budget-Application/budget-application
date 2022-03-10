@@ -6,7 +6,6 @@ import {
 import { View, Text, ImageBackground, Image, Pressable } from "react-native";
 
 export default function CustomeDrawer({ userDetails, props, navigation }) {
-  console.log(navigation);
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView

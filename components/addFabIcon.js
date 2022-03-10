@@ -7,8 +7,8 @@ export default function MyIcon({ name = "home", size = 40, color = "black" }) {
   return <Icon name={name} size={size} color={color} />;
 }
 
-export function MyAntIcon({ name, size = 40, color = "black" }) {
-  return <AntDesignIcon name={name} size={size} color={color} />;
+export function MyAntIcon({ name, size = 40, color = "black", styles }) {
+  return <AntDesignIcon name={name} size={size} color={color} style={styles} />;
 }
 
 export function MyFontAwesomeIcon({ name, size = 40, color = "black" }) {

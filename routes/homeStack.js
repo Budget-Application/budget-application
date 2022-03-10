@@ -6,6 +6,8 @@ import AddExpenseScreen from "../screens/addExpenseScreen";
 import ProfileScreen from "../screens/profileScreen";
 import LoginScreen from "../screens/userAuthScreens/LoginScreen";
 import UserDetails from "../screens/userAuthScreens/UserDetails";
+import CreateBudgetScreen from "../screens/createBudgetScreen";
+import AddUsersScreen from "../screens/addUsersScreen";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +29,7 @@ export default function CreateNavigationContainer() {
           component={Home}
           options={{
             title: "Home",
+            headerLeft: null,
             headerTitleAlign: "left",
             headerRightContainerStyle: { paddingRight: 10 },
           }}
@@ -47,6 +50,25 @@ export default function CreateNavigationContainer() {
             headerLeftContainerStyle: { paddingLeft: 5 },
           }}
         />
+        <Stack.Screen
+          name="CreateBudget"
+          component={CreateBudgetScreen}
+          options={{
+            title: "New Budget",
+            headerRightContainerStyle: { paddingRight: 20 },
+            headerLeftContainerStyle: { paddingLeft: 5 },
+          }}
+        />
+        <Stack.Screen
+          name="AddUsers"
+          component={AddUsersScreen}
+          options={{
+            title: "New Budget",
+            headerRightContainerStyle: { paddingRight: 20 },
+            headerLeftContainerStyle: { paddingLeft: 5 },
+          }}
+        />
+
         <Stack.Screen
           name="Profile"
           component={ProfileScreen}

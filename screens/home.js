@@ -6,7 +6,7 @@ import MyIcon from "../components/addFabIcon";
 import LoadingView from "../components/loadingView";
 import { useIsFocused } from "@react-navigation/native";
 
-export default function Home({route, navigation }) {
+export default function Home({ route, navigation }) {
   const [budgetData, setBudgetData] = useState([]);
   const [userDetails, setUserDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -61,26 +61,38 @@ export default function Home({route, navigation }) {
       {isLoading ? (
         <LoadingView />
       ) : (
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          data={budgetData}
-          renderItem={({ item }) => (
-            <BudgetItem
-              item={item}
-              navigation={navigation}
-              userDetails={userDetails}
-            />
-          )}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                marginLeft: "17.5%",
-                height: 1,
-                backgroundColor: "#c0c0c0",
+        <View style={{ flex: 1 }}>
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            data={budgetData}
+            renderItem={({ item }) => (
+              <BudgetItem
+                item={item}
+                navigation={navigation}
+                userDetails={userDetails}
+              />
+            )}
+            ItemSeparatorComponent={() => (
+              <View
+                style={{
+                  marginLeft: "17.5%",
+                  height: 1,
+                  backgroundColor: "#c0c0c0",
+                }}
+              />
+            )}
+          />
+          <View style={Styles.FabIcon}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => {
+                navigation.navigate("AddUsers");
               }}
-            />
-          )}
-        />
+            >
+              <MyIcon name={"plus"} size={40} color={"#fff"} />
+            </TouchableOpacity>
+          </View>
+        </View>
       )}
     </View>
   );
@@ -102,5 +114,17 @@ const Styles = StyleSheet.create({
   headerText: {
     fontSize: 50,
     justifyContent: "center",
+  },
+  FabIcon: {
+    backgroundColor: "#00f2aa",
+    width: "15%",
+    height: "7.5%",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 50,
+    right: 20,
+    borderRadius: 100,
+    elevation: 5,
   },
 });
