@@ -5,6 +5,7 @@ import {
   doc,
   runTransaction,
   serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 import { db } from "../setup.js";
 
@@ -19,6 +20,22 @@ export const getDocument = async (documentPath) => {
     return docSnap.exists() ? { ...docSnap.data(), id: docSnap.id } : null;
   } catch (e) {
     console.error(`Error getting document: ${documentPath}`, e);
+  }
+};
+
+/**
+ * Function to create new document
+ * @param {String} documentPath - The path of the document to set data
+ * @param {Object} properties - The properties to add to the document, e.g: `{key1: value1, key2: value2}`
+ * @returns true/false
+ */
+ export const setDocument = async (documentPath, properties) => {
+  try {
+    await setDoc(doc(db, documentPath), properties);
+    return true;
+  } catch (e) {
+    console.error(`Error creating document: ${documentPath}`, e);
+    return false
   }
 };
 

@@ -17,3 +17,16 @@ export const getUserBudgetList = async (uid) => {
   }));
   return budgets;
 };
+
+/**
+ * Function to create new user
+ * @param {String} uid - The uid of the user
+ * @param {Object} userDetails - The user details to create.
+ * ```{id: uid,
+      email: userEmail,
+      name: fullName,
+      phone_no: userPhoneNumber}```
+ */
+export const createNewUser = async (uid, userDetails) => {
+  return await db.setDocument(`users/${uid}`, userDetails);
+}

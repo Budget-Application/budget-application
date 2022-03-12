@@ -9,12 +9,17 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./LoginStyles";
-import { PhoneAuthProvider, signInWithCredential, onAuthStateChanged } from "firebase/auth";
+import {
+  PhoneAuthProvider,
+  signInWithCredential,
+  onAuthStateChanged,
+} from "firebase/auth";
 import { auth } from "../../db/setup";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import PhoneInput from "react-native-phone-number-input";
 import { getApp } from "firebase/app";
 import { getUserDetails } from "../../db/apis/user";
+import LoadingView from "../../components/loadingView";
 
 export default function LoginScreen({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -27,6 +32,7 @@ export default function LoginScreen({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUID(user.uid);
@@ -35,6 +41,12 @@ export default function LoginScreen({ navigation }) {
         if (userDetails) {
           console.log("User is already signed-in");
           navigation.replace("Home", { userDetails: userDetails });
+        } else {
+          console.log("User signed in, but details not updated");
+          navigation.navigate("UserDetails", {
+            uid: user.uid,
+            phoneNumber: user.phoneNumber,
+          });
         }
       } else {
         console.log("User not signed in");
@@ -116,9 +128,10 @@ export default function LoginScreen({ navigation }) {
                       verificationCode
                     );
                     signInWithCredential(auth, credential).then(() => {
+                      console.log(auth.currentUser);
                       navigation.navigate("UserDetails", {
                         uid: auth.currentUser.uid,
-                        phoneNumber: phoneNumber,
+                        phoneNumber: auth.currentUser.phoneNumber,
                       });
                     });
                   } catch (err) {
@@ -131,6 +144,8 @@ export default function LoginScreen({ navigation }) {
                 <Text style={styles.buttonTitle}>Verify</Text>
               </TouchableOpacity>
             </>
+          ) : isLoading || !!auth.currentUser ? (
+            <LoadingView />
           ) : (
             <>
               <Text style={styles.phoneTitle}>Enter your phone number</Text>

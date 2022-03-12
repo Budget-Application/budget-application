@@ -6,20 +6,33 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  Alert,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { createNewUser } from "../../db/apis/user";
 
 export default function UserDetails({ route, navigation }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
 
   const onRegisterPress = () => {
-    navigation.replace("Home", {
-      id: route.params.uid,
+    const userDetails = {
       email: email,
       name: fullName,
       phone_no: route.params.phoneNumber,
-    });
+    };
+    createNewUser(route.params.uid, userDetails)
+      .then(
+        navigation.replace("Home", {
+          id: route.params.uid,
+          ...userDetails,
+        })
+      )
+      .catch((e) => {
+        Alert.alert("Network Error", "Please try again later", [
+          { text: "OK" },
+        ]);
+      });
   };
 
   return (
