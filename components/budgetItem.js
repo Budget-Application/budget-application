@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { formatLastUpdatedTime } from "./resuableFunctions";
+import { formatDisplayAmount } from "./resuableFunctions";
 
 export default function BudgetItem({ item, navigation, userDetails }) {
   const budgetPressHandler = () => {
     navigation.navigate("BudgetDrawer", { ...item, userDetails });
   };
-
   return (
     <TouchableOpacity onPress={budgetPressHandler}>
       <View style={Styles.budgetItemView}>
@@ -23,7 +23,7 @@ export default function BudgetItem({ item, navigation, userDetails }) {
           </Text>
           <Text style={Styles.budgetAmount}>
             Expense Amount: {"\u20B9"}
-            {item.budget_total}{" "}
+            {formatDisplayAmount(item.budget_total, 8)}{" "}
           </Text>
         </View>
         <View style={Styles.lastTimeView}>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
 import BudgetCalendar from "../components/calenderView";
 import { useIsFocused } from "@react-navigation/native";
+import MyIcon from "../components/addFabIcon";
 
 const monthNames = {
   January: 0,
@@ -19,13 +20,26 @@ const monthNames = {
 };
 
 export default function BudgetMonthView({ route, navigation }) {
+  const currentDate = new Date();
   const [state, setState] = useState({
-    activeDate: new Date(),
+    activeDate: currentDate,
   });
   const isFocused = useIsFocused();
+  var arrowDirection = "";
+  if (state.activeDate.getFullYear() > currentDate.getFullYear())
+    arrowDirection = "arrow-left";
+  else if (state.activeDate.getFullYear() < currentDate.getFullYear())
+    arrowDirection = "arrow-right";
+  else {
+    if (state.activeDate.getMonth() > currentDate.getMonth())
+      arrowDirection = "arrow-left";
+    else if (state.activeDate.getMonth() < currentDate.getMonth())
+      arrowDirection = "arrow-right";
+  }
+
   useEffect(() => {
     if (route.params?.selectedYear) {
-      var date = new Date();
+      var date = currentDate;
       date.setFullYear(route.params.selectedYear);
       date.setMonth(monthNames[route.params.selectedMonth]);
       setState({ activeDate: date });
@@ -40,6 +54,19 @@ export default function BudgetMonthView({ route, navigation }) {
         navigation={navigation}
         budget_id={route.params.budget_id}
       />
+      {arrowDirection.length > 0 ? (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          style={style.FabIcon}
+          onPress={() => {
+            setState({ activeDate: currentDate });
+          }}
+        >
+          <MyIcon name={arrowDirection} size={30} color={"#fff"} />
+        </TouchableOpacity>
+      ) : (
+        <></>
+      )}
     </View>
   );
 }
@@ -47,5 +74,17 @@ export default function BudgetMonthView({ route, navigation }) {
 const style = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  FabIcon: {
+    backgroundColor: "#00f2aa",
+    width: "15%",
+    height: "7.5%",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 50,
+    right: 20,
+    borderRadius: 100,
+    elevation: 5,
   },
 });

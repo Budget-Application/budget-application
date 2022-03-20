@@ -5,12 +5,9 @@ import {
   TextInput,
   Button,
   Text,
-  Modal,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   FlatList,
 } from "react-native";
-import * as Contacts from "expo-contacts";
 import { MyAntIcon } from "../components/addFabIcon";
 
 export default function CreateBudgetScreen({ route, navigation }) {
@@ -50,7 +47,13 @@ export default function CreateBudgetScreen({ route, navigation }) {
           onChangeText={(name) => setNewBudget(name)}
         />
       </View>
-
+      <View
+        style={{
+          paddingTop: "5%",
+          borderBottomColor: "#808080",
+          borderBottomWidth: 1,
+        }}
+      />
       <Text style={Styles.flatListHeader}>Budget Group Members</Text>
       <FlatList
         data={users}
@@ -92,11 +95,14 @@ const Styles = StyleSheet.create({
     paddingHorizontal: "5%",
   },
   label: {
+    color: "#808080",
     fontSize: 15,
   },
   budgetText: {
     flex: 1,
+    paddingLeft: "5%",
     fontSize: 30,
+    borderColor: "#808080",
     borderWidth: 1,
   },
   flatListHeader: {

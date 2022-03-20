@@ -18,6 +18,7 @@ import LoadingView from "../components/loadingView";
 import { formatLastUpdatedTime } from "../components/resuableFunctions";
 import CustomButton from "../components/customButton";
 import { addNewExpenseItem } from "../db/apis/budget";
+import { formatDisplayAmount } from "../components/resuableFunctions";
 
 export default function DailyBudgetView({ route, navigation }) {
   const [expenseDetails, setExpenseDetails] = useState({
@@ -78,7 +79,7 @@ export default function DailyBudgetView({ route, navigation }) {
             </Text>
             <Text style={Styles.dayTotal}>
               Day Total: {"\u20B9"}
-              {expenseDetails.dayTotal}
+              {formatDisplayAmount(expenseDetails.dayTotal, 8)}
             </Text>
           </View>
           <Modal
@@ -106,7 +107,7 @@ export default function DailyBudgetView({ route, navigation }) {
                   <Text style={Styles.expenseLabel}>Amount</Text>
                   <Text style={Styles.modelExpenseText}>
                     {"\u20B9"}
-                    {updateModalVisible.expenseAmt}
+                    {formatDisplayAmount(updateModalVisible.expenseAmt, 8)}
                   </Text>
                 </View>
                 <View style={Styles.expenseNewAmtModal}>
@@ -224,7 +225,7 @@ export default function DailyBudgetView({ route, navigation }) {
                   <View style={Styles.expenseAmtView}>
                     <Text style={Styles.expenseAmt}>
                       {"\u20B9"}
-                      {item.amount}
+                      {formatDisplayAmount(item.amount, 6)}
                     </Text>
                   </View>
                 </View>

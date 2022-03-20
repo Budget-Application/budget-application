@@ -11,6 +11,7 @@ import { getMonthlyExpense } from "../db/apis/budget";
 import LoadingView from "../components/loadingView";
 import MyIcon from "./addFabIcon";
 import { RFPercentage } from "react-native-responsive-fontsize";
+import { formatDisplayAmount } from "./resuableFunctions";
 
 const months = [
   "January",
@@ -86,6 +87,7 @@ export default function BudgetCalendar({
   const [isLoading, setIsLoading] = useState(false);
   var matrix = null;
   var monthlyData = {};
+  const currentDate = new Date();
 
   useEffect(async () => {
     setIsLoading(true);
@@ -152,7 +154,11 @@ export default function BudgetCalendar({
                 justifyContent: "center",
                 borderRadius: 50,
                 backgroundColor:
-                  item == state.activeDate.getDate() ? "#00f2aa" : "#f0f0f0",
+                  item == currentDate.getDate() &&
+                  state.activeDate.getMonth() == currentDate.getMonth() &&
+                  state.activeDate.getFullYear() == currentDate.getFullYear()
+                    ? "#00f2aa"
+                    : "#f0f0f0",
                 marginVertical: "20%",
               }}
             >
@@ -162,7 +168,9 @@ export default function BudgetCalendar({
                   textAlign: "center",
                   textAlignVertical: "center",
                   color:
-                    item == state.activeDate.getDate()
+                    item == currentDate.getDate() &&
+                    state.activeDate.getMonth() == currentDate.getMonth() &&
+                    state.activeDate.getFullYear() == currentDate.getFullYear()
                       ? "#ffffff"
                       : colIndex == 0
                       ? "#a00"
@@ -178,7 +186,9 @@ export default function BudgetCalendar({
               <Text
                 style={{
                   color:
-                    item == state.activeDate.getDate()
+                    item == currentDate.getDate() &&
+                    state.activeDate.getMonth() == currentDate.getMonth() &&
+                    state.activeDate.getFullYear() == currentDate.getFullYear()
                       ? "#ffffff"
                       : colIndex == 0
                       ? "#a00"
@@ -190,7 +200,7 @@ export default function BudgetCalendar({
               >
                 {item != ""
                   ? item in monthlyData
-                    ? monthlyData[item]
+                    ? formatDisplayAmount(monthlyData[item], 6)
                     : 0
                   : ""}
               </Text>
@@ -222,7 +232,10 @@ export default function BudgetCalendar({
             <Text style={Styles.headerText}>
               {months[state.activeDate.getMonth()]} &nbsp;
               {state.activeDate.getFullYear()} &ensp; - &ensp;
-              <Text style={Styles.headerAmount}>{totalMonthAmount} </Text>
+              <Text style={Styles.headerAmount}>
+                {"\u20B9"}
+                {formatDisplayAmount(totalMonthAmount, 8)}{" "}
+              </Text>
             </Text>
           </TouchableOpacity>
 
@@ -248,7 +261,7 @@ export default function BudgetCalendar({
     newActiveDate.setMonth(state.activeDate.getMonth());
     newActiveDate.setDate(item);
     if (item.length > 0) {
-      setState({ activeDate: newActiveDate });
+      // setState({ activeDate: newActiveDate });
       navigation.navigate("Budget_day_view", {
         budget_id: budget_id,
         selectedDate: GetCompleteDate(newActiveDate),
@@ -296,12 +309,11 @@ const Styles = StyleSheet.create({
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
-    fontStyle: "italic",
+    // fontStyle: "italic",
   },
   headerAmount: {
-    color: "#808080",
+    color: "black",
     fontWeight: "bold",
-    fontStyle: "italic",
   },
   calendarHeader: {
     flex: 1,

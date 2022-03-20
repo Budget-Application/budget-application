@@ -13,6 +13,7 @@ import { getYearlyExpense } from "../db/apis/budget";
 import LoadingView from "../components/loadingView";
 import { MyAntIcon } from "../components/addFabIcon";
 import { useIsFocused } from "@react-navigation/native";
+import { formatDisplayAmount } from "../components/resuableFunctions";
 
 function getYears() {
   var yearList = [];
@@ -136,7 +137,7 @@ export default function YearView({ route, navigation }) {
               </Text>
               <Text style={Styles.selectedYearBudget}>
                 Year Total: {"\u20B9"}
-                {expenseDetails.yearTotal}
+                {formatDisplayAmount(expenseDetails.yearTotal, 8)}
               </Text>
             </Pressable>
           </View>
@@ -166,7 +167,10 @@ export default function YearView({ route, navigation }) {
                     <Text style={Styles.monthAmount}>
                       {"\u20B9"}
                       {expenseDetails.yearExpense[index + 1]
-                        ? expenseDetails.yearExpense[index + 1]
+                        ? formatDisplayAmount(
+                            expenseDetails.yearExpense[index + 1],
+                            6
+                          )
                         : 0}
                     </Text>
                   </View>

@@ -2,21 +2,22 @@ import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
-  TextInput,
-  Button,
   Text,
-  Modal,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   FlatList,
 } from "react-native";
 import * as Contacts from "expo-contacts";
 import MyIcon, { MyAntIcon } from "../components/addFabIcon";
 
+const formatPhoneNumber = (number) => {
+  if (number) number = number.replace(/\s+/g, "");
+  if (number != undefined && number.length == 10) return "+91" + number;
+  else return number;
+};
+
 export default function AddUsersScreen({ route, navigation }) {
   const [contacts, setContacts] = useState(null);
   const [members, setMembers] = useState([]);
-  const [showMembers, setShowMembers] = useState([]);
 
   useEffect(async () => {
     const { status } = await Contacts.requestPermissionsAsync();
@@ -26,15 +27,15 @@ export default function AddUsersScreen({ route, navigation }) {
         fields: [Contacts.Fields.PhoneNumbers],
       });
       const newData = data.map((item) => {
-        return {
-          id: item.id,
-          name: item.name,
-          PhoneNumber:
-            item.phoneNumbers &&
-            item.phoneNumbers[0] &&
-            item.phoneNumbers[0].number,
-          isSelected: false,
-        };
+        if (item.phoneNumbers && item.phoneNumbers[0]) {
+          const phoneNumber = formatPhoneNumber(item.phoneNumbers[0].number);
+
+          return {
+            id: item.id,
+            name: item.name,
+            PhoneNumber: phoneNumber,
+          };
+        }
       });
       setContacts(newData);
     }
@@ -42,7 +43,7 @@ export default function AddUsersScreen({ route, navigation }) {
 
   const filterSelectedUsers = () => {
     const data = contacts.filter((item) => {
-      return item.isSelected;
+      return members.includes(item.id);
     });
     navigation.navigate("CreateBudget", { data });
   };
@@ -56,20 +57,19 @@ export default function AddUsersScreen({ route, navigation }) {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
-              //   var resultMembers = members;
-              //   var index = resultMembers.indexOf(item.id);
-              //   console.log(index);
-              //   console.log("Success");
-              // else resultMembers = [...resultMembers, item.id];
-              item.isSelected = !item.isSelected;
-              setMembers([...members, item.id]);
+              tempMember = members.includes(item.id)
+                ? members.filter((value) => {
+                    return item.id != value;
+                  })
+                : [...members, item.id];
+              setMembers(tempMember);
             }}
             style={{
-              backgroundColor: item.isSelected ? "#d5f2ea" : "white",
+              backgroundColor: members.includes(item.id) ? "#d5f2ea" : "white",
             }}
           >
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              {item.isSelected && (
+              {members.includes(item.id) && (
                 <MyAntIcon
                   name={"checkcircle"}
                   size={25}
@@ -129,7 +129,5 @@ const Styles = StyleSheet.create({
     paddingHorizontal: "10%",
     fontSize: 12,
     alignSelf: "flex-end",
-    // justifyContent: "center",
-    // alignContent: "center",
   },
 });

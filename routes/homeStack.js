@@ -56,7 +56,7 @@ export default function CreateNavigationContainer() {
           options={{
             title: "New Budget",
             headerRightContainerStyle: { paddingRight: 20 },
-            headerLeftContainerStyle: { paddingLeft: 5 },
+            headerLeftContainerStyle: { paddingLeft: 20 },
           }}
         />
         <Stack.Screen
