@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import * as Contacts from "expo-contacts";
 import MyIcon, { MyAntIcon } from "../components/addFabIcon";
+import { getPhoneNumberToUserMap } from "../db/apis/user";
 
 const formatPhoneNumber = (number) => {
   if (number) number = number.replace(/\s+/g, "");
@@ -23,15 +24,24 @@ export default function AddUsersScreen({ route, navigation }) {
     const { status } = await Contacts.requestPermissionsAsync();
 
     if (status === "granted") {
-      const { data } = await Contacts.getContactsAsync({
+      let { data } = await Contacts.getContactsAsync({
         fields: [Contacts.Fields.PhoneNumbers],
       });
+      const phoneToUserMap = await getPhoneNumberToUserMap();
+      data = data.filter((item) => {
+        if (item.phoneNumbers && item.phoneNumbers[0]) {
+          const phoneNumber = formatPhoneNumber(item.phoneNumbers[0].number);
+          return phoneNumber in phoneToUserMap;
+        }
+        return false;
+      });
+
       const newData = data.map((item) => {
         if (item.phoneNumbers && item.phoneNumbers[0]) {
           const phoneNumber = formatPhoneNumber(item.phoneNumbers[0].number);
 
           return {
-            id: item.id,
+            id: phoneToUserMap[phoneNumber],
             name: item.name,
             PhoneNumber: phoneNumber,
           };
@@ -57,7 +67,7 @@ export default function AddUsersScreen({ route, navigation }) {
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
-              tempMember = members.includes(item.id)
+              const tempMember = members.includes(item.id)
                 ? members.filter((value) => {
                     return item.id != value;
                   })

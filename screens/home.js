@@ -10,16 +10,18 @@ export default function Home({ route, navigation }) {
   const [budgetData, setBudgetData] = useState([]);
   const [userDetails, setUserDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [userId, setUserId] = useState(route.params.id);
   const isFocused = useIsFocused();
 
   useEffect(async () => {
-    const userDetailsDB = await user.getUserDetails("testUser");
+    const userDetailsDB = await user.getUserDetails(userId);
+    console.log(userDetailsDB);
     setUserDetails(userDetailsDB);
   }, []);
 
   useEffect(async () => {
     setIsLoading(true);
-    const budgetList = await user.getUserBudgetList("testUser");
+    const budgetList = await user.getUserBudgetList(userId);
     setBudgetData(budgetList);
     setIsLoading(false);
   }, [isFocused]);

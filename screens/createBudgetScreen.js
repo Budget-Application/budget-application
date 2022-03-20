@@ -7,8 +7,11 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from "react-native";
 import { MyAntIcon } from "../components/addFabIcon";
+import { createNewBudgetGroup } from "../db/apis/util";
+import { auth } from "../db/setup";
 
 export default function CreateBudgetScreen({ route, navigation }) {
   const [newBudget, setNewBudget] = useState("");
@@ -25,9 +28,51 @@ export default function CreateBudgetScreen({ route, navigation }) {
           }}
         />
       ),
-      headerRight: () => <Button title="Create" color="#00f2aa" />,
+      headerRight: () => (
+        <Button
+          title="Create"
+          color="#00f2aa"
+          onPress={async () => {
+            if (!newBudget.trim()) {
+              Alert.alert("Empty Budget Name", "Please enter Budget Name", [
+                { text: "OK" },
+              ]);
+            } else {
+              const userIds = [auth.currentUser.uid];
+              users.map((user) => {
+                userIds.push(user.id);
+              });
+              const response = await createNewBudgetGroup(newBudget, userIds);
+              if (response) {
+                Alert.alert("Request Successful", "Created budget group.", [
+                  {
+                    text: "OK",
+                    onPress: () =>
+                      navigation.replace("Home", {
+                        id: auth.currentUser.uid,
+                      }),
+                  },
+                ]);
+              } else {
+                {
+                  Alert.alert(
+                    "Network Error",
+                    "Failed to create budget.\nPlease try again later.",
+                    [
+                      {
+                        text: "OK",
+                        onPress: () => navigation.goBack(),
+                      },
+                    ]
+                  );
+                }
+              }
+            }
+          }}
+        />
+      ),
     });
-  }, [navigation]);
+  }, [navigation, newBudget]);
 
   const filterUsers = (id) => {
     const newUsers = users.filter((item) => {

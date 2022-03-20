@@ -25,7 +25,7 @@ export default function UserDetails({ route, navigation }) {
       .then(
         navigation.replace("Home", {
           id: route.params.uid,
-          ...userDetails,
+          userDetails: userDetails,
         })
       )
       .catch((e) => {

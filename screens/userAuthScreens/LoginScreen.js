@@ -40,7 +40,10 @@ export default function LoginScreen({ navigation }) {
         setIsLoading(false);
         if (userDetails) {
           console.log("User is already signed-in");
-          navigation.replace("Home", { userDetails: userDetails });
+          navigation.replace("Home", {
+            id: userDetails.id,
+            userDetails: userDetails,
+          });
         } else {
           console.log("User signed in, but details not updated");
           navigation.navigate("UserDetails", {

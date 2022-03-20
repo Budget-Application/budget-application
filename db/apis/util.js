@@ -29,20 +29,20 @@ export const getDocument = async (documentPath) => {
  * @param {Object} properties - The properties to add to the document, e.g: `{key1: value1, key2: value2}`
  * @returns true/false
  */
- export const setDocument = async (documentPath, properties) => {
+export const setDocument = async (documentPath, properties) => {
   try {
     await setDoc(doc(db, documentPath), properties);
     return true;
   } catch (e) {
     console.error(`Error creating document: ${documentPath}`, e);
-    return false
+    return false;
   }
 };
 
 /**
  * Function to get documents from a collection
  * @param {String} collectionPath - The path of the collection to get docs from
- * @returns {Array} An array of `documents` 
+ * @returns {Array} An array of `documents`
  */
 export const getDocuments = async (collectionPath) => {
   try {
@@ -92,7 +92,8 @@ export const addNewExpenseItem = async (budgetId, date, expenseData) => {
 
       const expenseAmount = dayDoc.exists()
         ? dayDoc.data()[expenseData.expenseName]
-          ? dayDoc.data()[expenseData.expenseName]["amount"] + expenseData.amount
+          ? dayDoc.data()[expenseData.expenseName]["amount"] +
+            expenseData.amount
           : expenseData.amount
         : expenseData.amount;
 
@@ -133,6 +134,37 @@ export const addNewExpenseItem = async (budgetId, date, expenseData) => {
     return response;
   } catch (e) {
     console.error("Error adding new-expense-item", e);
+    return false;
+  }
+};
+
+/**
+ * Function to create new budget group
+ * @param {String} budgetName - The budget name
+ * @param {Array} userIds - List of userIds to include in budget group
+ */
+export const createNewBudgetGroup = async (budgetName, userIds) => {
+  const userRefs = [];
+  const budgetRef = doc(collection(db, "budgets"));
+  userIds.forEach((userId) => {
+    userRefs.push(doc(db, `users/${userId}/budgets/${budgetRef.id}`));
+  });
+  try {
+    const response = await runTransaction(db, async (transaction) => {
+      transaction.set(budgetRef, {
+        budget_name: budgetName,
+        budget_total: 0,
+        last_updated_time: serverTimestamp(),
+        users: userIds,
+      });
+      userRefs.forEach((userRef) => {
+        transaction.set(userRef, { ref: budgetRef }, { merge: true });
+      });
+      return true;
+    });
+    return response;
+  } catch (e) {
+    console.error("Error creating new budget", e);
     return false;
   }
 };

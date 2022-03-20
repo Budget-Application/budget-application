@@ -8,13 +8,15 @@ export const getUserDetails = async (uid) => {
 export const getUserBudgetList = async (uid) => {
   const budgetRefs = await db.getDocuments(`users/${uid}/budgets`);
   const budgets = [];
-  await Promise.all(budgetRefs.map(async (budgetRefs) => {
-    const docRef = budgetRefs["ref"];
-    if (docRef instanceof DocumentReference) {
-      const docSnap = await getDoc(docRef);
-      budgets.push({...docSnap.data(), id: docSnap.id});
-    }
-  }));
+  await Promise.all(
+    budgetRefs.map(async (budgetRefs) => {
+      const docRef = budgetRefs["ref"];
+      if (docRef instanceof DocumentReference) {
+        const docSnap = await getDoc(docRef);
+        budgets.push({ ...docSnap.data(), id: docSnap.id });
+      }
+    })
+  );
   return budgets;
 };
 
@@ -29,4 +31,17 @@ export const getUserBudgetList = async (uid) => {
  */
 export const createNewUser = async (uid, userDetails) => {
   return await db.setDocument(`users/${uid}`, userDetails);
-}
+};
+
+/**
+ * Function to get phone number to user map
+ * @returns - `{phoneNumber1: uid1, phoneNumber2: uid2}`
+ */
+export const getPhoneNumberToUserMap = async () => {
+  const users = await db.getDocuments(`users`);
+  const phoneToUserMap = {};
+  users.forEach((user) => {
+    phoneToUserMap[user.phone_no] = user.id;
+  });
+  return phoneToUserMap;
+};
