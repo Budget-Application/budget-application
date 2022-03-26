@@ -58,6 +58,12 @@ export default function YearView({ route, navigation }) {
       route.params.selectedYear
     );
     setIsLoading(false);
+    return () => {
+      setExpenseDetails();
+      setIsLoading();
+      setRefreshing();
+      setYearModalVisible();
+    };
   }, [isFocused]);
 
   const onRefresh = useCallback(async () => {

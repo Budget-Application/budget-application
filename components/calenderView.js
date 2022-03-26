@@ -104,6 +104,10 @@ export default function BudgetCalendar({
     matrix = generateMatrix(state);
     setRow(fillRowData(matrix));
     setIsLoading(false);
+    return () => {
+      setRow();
+      setIsLoading();
+    };
   }, [state]);
 
   const fillDayRowData = (matrix) => {

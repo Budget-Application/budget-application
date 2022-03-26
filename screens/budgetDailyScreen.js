@@ -45,6 +45,13 @@ export default function DailyBudgetView({ route, navigation }) {
       route.params.selectedDate
     );
     setIsLoading(false);
+    return () => {
+      setExpenseDetails();
+      setIsLoading();
+      setNewDayAmt();
+      setRefreshing();
+      setUpdateModelVisible();
+    };
   }, [isFocused]);
 
   const onRefresh = useCallback(async () => {

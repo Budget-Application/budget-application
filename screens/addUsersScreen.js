@@ -49,6 +49,10 @@ export default function AddUsersScreen({ route, navigation }) {
       });
       setContacts(newData);
     }
+    return () => {
+      setContacts();
+      setMembers();
+    };
   }, []);
 
   const filterSelectedUsers = () => {

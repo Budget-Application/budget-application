@@ -56,6 +56,14 @@ export default function LoginScreen({ navigation }) {
         setIsLoading(false);
       }
     });
+    return () => {
+      setIsLoading();
+      setNextPage();
+      setPhoneNumber();
+      setUID();
+      setVerificationCode();
+      setVerificationId();
+    };
   }, []);
 
   const onNext = async () => {

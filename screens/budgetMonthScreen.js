@@ -44,6 +44,9 @@ export default function BudgetMonthView({ route, navigation }) {
       date.setMonth(monthNames[route.params.selectedMonth]);
       setState({ activeDate: date });
     }
+    return () => {
+      setState();
+    };
   }, [isFocused]);
 
   return (

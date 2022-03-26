@@ -31,6 +31,13 @@ export default function Home({ route, navigation }) {
     const budgetList = await user.getUserBudgetList(userId);
     setBudgetData(budgetList);
     setIsLoading(false);
+    return () => {
+      setBudgetData();
+      setUserDetails();
+      setIsLoading();
+      setUserId();
+      setRefreshing();
+    };
   }, [isFocused]);
 
   const onRefresh = useCallback(() => {
