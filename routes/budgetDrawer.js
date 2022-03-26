@@ -5,8 +5,10 @@ import BudgetMonthView from "../screens/budgetMonthScreen";
 import DailyBudgetView from "../screens/budgetDailyScreen";
 import GetCompleteDate from "../components/getCompletDate";
 import CustomeDrawer from "../components/customDrawer";
-import MyAntIcon from "../components/addFabIcon";
+import MyAntIcon, { MyFontAwesomeIcon } from "../components/addFabIcon";
 import MyIcon from "../components/addFabIcon";
+import BudgetTitle from "../components/budgetTitle";
+import BudgetUsersView from "../screens/budgetUsersScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -44,7 +46,18 @@ export default function BudgetDrawer({ route, navigation }) {
         backgroundColor: "#e6e6e6",
       }}
       screenOptions={{
-        headerTitle: route.params.budget_name,
+        headerTitleAlign: "center",
+        headerTitle: () => {
+          return (
+            <BudgetTitle
+              title={route.params.budget_name}
+              budgetId={route.params.id}
+              key={route.params.id}
+              users={route.params.users}
+              navigation={navigation}
+            />
+          );
+        },
         headerStyle: { backgroundColor: "#d5f2ea" },
         headerBackgroundContainerStyle: { backgroundColor: "#d5f2ea" },
         drawerActiveBackgroundColor: "#00f2aa",
@@ -97,6 +110,20 @@ export default function BudgetDrawer({ route, navigation }) {
           title: "Daily Expense",
           drawerIcon: ({ color }) => (
             <MyIcon name={"columns"} size={20} color={color} />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Budget_users"
+        component={BudgetUsersView}
+        initialParams={{
+          budgetId: route.params.id,
+          users: route.params.users
+        }}
+        options={{
+          title: "Budget Users",
+          drawerIcon: ({ color }) => (
+            <MyFontAwesomeIcon name={"users"} size={20} color={color} />
           ),
         }}
       />

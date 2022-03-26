@@ -27,7 +27,11 @@ import {
 // });
 
 export default function App() {
-  LogBox.ignoreLogs(["Setting a timer", "AsyncStorage has been extracted"]);
+  LogBox.ignoreLogs([
+    "Setting a timer",
+    "AsyncStorage has been extracted",
+    "Can't perform a React state update on an unmounted component",
+  ]);
   let [fontsLoaded, setFontsLoaded] = useFonts({
     NunitoSans_200ExtraLight,
     NunitoSans_200ExtraLight_Italic,
