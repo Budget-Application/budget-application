@@ -1,9 +1,11 @@
 import React from "react";
 import {
   DrawerContentScrollView,
+  DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
 import { View, Text, ImageBackground, Image, Pressable } from "react-native";
+import MyIcon, { MyAntIcon, MyFontAwesomeIcon } from "./addFabIcon";
 
 export default function CustomeDrawer({ userDetails, props, navigation }) {
   return (
@@ -54,6 +56,17 @@ export default function CustomeDrawer({ userDetails, props, navigation }) {
           </Text>
         </ImageBackground>
         <View style={{ backgroundColor: "#d5f2ea", flex: 1, padding: 10 }}>
+          <DrawerItem
+            icon={() => <MyIcon color={"black"} size={20} name={"home"} />}
+            label="Home"
+            labelStyle={{
+              marginLeft: -25,
+              fontWeight: "normal",
+              fontSize: 15,
+              color: "black",
+            }}
+            onPress={() => navigation.navigate("Home", { id: userDetails.id })}
+          />
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
