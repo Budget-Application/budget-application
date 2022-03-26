@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   Pressable,
   Modal,
   TouchableWithoutFeedback,
+  RefreshControl,
 } from "react-native";
 import { getYearlyExpense } from "../db/apis/budget";
 import LoadingView from "../components/loadingView";
@@ -34,6 +35,7 @@ export default function YearView({ route, navigation }) {
   });
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const monthNames = [
     "January",
     "February",
@@ -57,6 +59,15 @@ export default function YearView({ route, navigation }) {
     );
     setIsLoading(false);
   }, [isFocused]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await updateYearExpenseData(
+      route.params.budget_id,
+      route.params.selectedYear
+    );
+    setRefreshing(false);
+  }, []);
 
   updateYearExpenseData = async (budgetId, selectedYear) => {
     let expense = await getYearlyExpense(budgetId, selectedYear);
@@ -145,6 +156,9 @@ export default function YearView({ route, navigation }) {
             <FlatList
               keyExtractor={(item, index) => index.toString()}
               data={monthNames}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
               renderItem={({ item, index }) => (
                 <TouchableOpacity
                   style={Styles.monthItemView}

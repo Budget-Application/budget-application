@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Text,
   View,
@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  RefreshControl,
 } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import MyIcon from "../components/addFabIcon";
@@ -36,6 +37,7 @@ export default function DailyBudgetView({ route, navigation }) {
 
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   useEffect(async () => {
     setIsLoading(true);
     await updateDayExpenseDetails(
@@ -44,6 +46,15 @@ export default function DailyBudgetView({ route, navigation }) {
     );
     setIsLoading(false);
   }, [isFocused]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await updateDayExpenseDetails(
+      route.params.budget_id,
+      route.params.selectedDate
+    );
+    setRefreshing(false);
+  }, []);
 
   updateDayExpenseDetails = async (budgetId, selectedDate) => {
     let expense = await getDailyExpense(budgetId, selectedDate);
@@ -202,6 +213,9 @@ export default function DailyBudgetView({ route, navigation }) {
           <FlatList
             data={expenseDetails.dayExpenses}
             keyExtractor={(item, index) => index.toString()}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => {

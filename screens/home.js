@@ -1,5 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, FlatList, TouchableOpacity } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
 import BudgetItem from "../components/budgetItem";
 import * as user from "../db/apis/user.js";
 import MyIcon from "../components/addFabIcon";
@@ -12,6 +18,7 @@ export default function Home({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState(route.params.id);
   const isFocused = useIsFocused();
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(async () => {
     const userDetailsDB = await user.getUserDetails(userId);
@@ -25,6 +32,14 @@ export default function Home({ route, navigation }) {
     setBudgetData(budgetList);
     setIsLoading(false);
   }, [isFocused]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    user
+      .getUserBudgetList(userId)
+      .then((budgetList) => setBudgetData(budgetList));
+    setRefreshing(false);
+  }, []);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -74,6 +89,9 @@ export default function Home({ route, navigation }) {
                 userDetails={userDetails}
               />
             )}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             ItemSeparatorComponent={() => (
               <View
                 style={{
