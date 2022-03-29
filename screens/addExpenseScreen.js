@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { StyleSheet, View, TextInput, Button, Alert } from "react-native";
 import LoadingView from "../components/loadingView";
 import { addNewExpenseItem } from "../db/apis/budget";
+import { sendNotificationToUsers } from "../components/resuableFunctions";
 
 export default function AddExpenseScreen({ route, navigation }) {
   const [expenseName, setExpenseName] = useState("");
   const [expenseAmt, setExpenseAmt] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -51,6 +51,14 @@ export default function AddExpenseScreen({ route, navigation }) {
                     },
                   ]
                 );
+                let title = route.params.budget_name;
+                let messageBody =
+                  route.params.userDetails.name +
+                  " create expense: " +
+                  expenseName +
+                  " with Amount \u20B9" +
+                  expenseAmt;
+                sendNotificationToUsers(route.params.users, title, messageBody);
               } else {
                 {
                   Alert.alert(

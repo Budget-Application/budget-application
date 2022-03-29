@@ -77,6 +77,9 @@ export default function BudgetDrawer({ route, navigation }) {
           budget_id: route.params.id,
           selectedYear: parseInt(currentDate.getFullYear()),
           selectedMonth: monthNames[currentDate.getMonth()],
+          users: route.params.users,
+          budget_name: route.params.budget_name,
+          userDetails: route.params.userDetails,
         }}
         options={{
           title: "Monthly Expense",
@@ -91,6 +94,9 @@ export default function BudgetDrawer({ route, navigation }) {
         initialParams={{
           budget_id: route.params.id,
           selectedYear: parseInt(currentDate.getFullYear()),
+          users: route.params.users,
+          budget_name: route.params.budget_name,
+          userDetails: route.params.userDetails,
         }}
         options={{
           title: "Yearly Expense",
@@ -105,6 +111,9 @@ export default function BudgetDrawer({ route, navigation }) {
         initialParams={{
           budget_id: route.params.id,
           selectedDate: GetCompleteDate(currentDate),
+          users: route.params.users,
+          budget_name: route.params.budget_name,
+          userDetails: route.params.userDetails,
         }}
         options={{
           title: "Daily Expense",
@@ -118,7 +127,9 @@ export default function BudgetDrawer({ route, navigation }) {
         component={BudgetUsersView}
         initialParams={{
           budgetId: route.params.id,
-          users: route.params.users
+          users: route.params.users,
+          budget_name: route.params.budget_name,
+          userDetails: route.params.userDetails,
         }}
         options={{
           title: "Budget Users",

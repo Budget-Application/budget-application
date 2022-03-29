@@ -82,6 +82,9 @@ export default function BudgetCalendar({
   setState,
   navigation,
   budget_id,
+  users,
+  budget_name,
+  userDetails,
 }) {
   const [row, setRow] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -230,6 +233,9 @@ export default function BudgetCalendar({
               navigation.navigate("Budget_year_view", {
                 budget_id: budget_id,
                 selectedYear: parseInt(state.activeDate.getFullYear()),
+                users: users,
+                budget_name: budget_name,
+                userDetails: userDetails,
               });
             }}
           >
@@ -267,8 +273,11 @@ export default function BudgetCalendar({
     if (item.length > 0) {
       // setState({ activeDate: newActiveDate });
       navigation.navigate("Budget_day_view", {
+        users: users,
         budget_id: budget_id,
         selectedDate: GetCompleteDate(newActiveDate),
+        budget_name: budget_name,
+        userDetails: userDetails,
       });
     }
   };
@@ -276,8 +285,8 @@ export default function BudgetCalendar({
   const changeMonth = (n) => {
     let newActiveDate = new Date();
     newActiveDate.setFullYear(state.activeDate.getFullYear());
+    newActiveDate.setDate(1);
     newActiveDate.setMonth(state.activeDate.getMonth() + n);
-    newActiveDate.setDate(state.activeDate.getDate());
     setState({ activeDate: newActiveDate });
   };
 

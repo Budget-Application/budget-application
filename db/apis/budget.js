@@ -47,11 +47,21 @@ export const getExpenseNames = async (budgetId) => {
 };
 
 /**
+ * Function to get expense names from a budget
+ * @param {String} budgetId - The budgetId to get expenseNames
+ */
+export const getUsersInBudget = async (budgetId) => {
+  const budgetDetails = await db.getDocument(`budgets/${budgetId}`);
+  const usersList = budgetDetails["users"];
+  return usersList;
+};
+
+/**
  * Function to add new expense for a date
  * @param {String} budgetId - The budgetId to update details
  * @param {String} date - The date to add expense. format: `01-01-2022`
  * @param {Object} expenseData - The expense details to add. format `{expenseName: "exp3", amount: 1}`
  */
- export const addNewExpenseItem = async (budgetId, date, expenseData) => {
+export const addNewExpenseItem = async (budgetId, date, expenseData) => {
   return await db.addNewExpenseItem(budgetId, date, expenseData);
- }
+};

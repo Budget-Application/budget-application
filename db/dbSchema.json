@@ -8,7 +8,8 @@
         "budget_id": {
           "ref": "/budgets/budget_id"
         }
-      }
+      },
+      "expoPushToken": "expoPushToken"
     }
   },
   "budgets": {

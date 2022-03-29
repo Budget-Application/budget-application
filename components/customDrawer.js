@@ -44,7 +44,7 @@ export default function CustomeDrawer({ userDetails, props, navigation }) {
               marginBottom: 5,
             }}
           >
-            {userDetails.name}
+            {userDetails?.name}
           </Text>
           <Text
             style={{
@@ -52,7 +52,7 @@ export default function CustomeDrawer({ userDetails, props, navigation }) {
               fontSize: 18,
             }}
           >
-            {userDetails.phone_no}
+            {userDetails?.phone_no}
           </Text>
         </ImageBackground>
         <View style={{ backgroundColor: "#d5f2ea", flex: 1, padding: 10 }}>
@@ -65,7 +65,12 @@ export default function CustomeDrawer({ userDetails, props, navigation }) {
               fontSize: 15,
               color: "black",
             }}
-            onPress={() => navigation.navigate("Home", { id: userDetails.id })}
+            onPress={() =>
+              navigation.navigate("Home", {
+                id: userDetails.id,
+                userDetails: userDetails,
+              })
+            }
           />
           <DrawerItemList {...props} />
         </View>

@@ -36,7 +36,6 @@ export default function BudgetMonthView({ route, navigation }) {
     else if (state.activeDate.getMonth() < currentDate.getMonth())
       arrowDirection = "arrow-right";
   }
-
   useEffect(() => {
     if (route.params?.selectedYear) {
       var date = currentDate;
@@ -56,6 +55,9 @@ export default function BudgetMonthView({ route, navigation }) {
         setState={setState}
         navigation={navigation}
         budget_id={route.params.budget_id}
+        users={route.params.users}
+        budget_name={route.params.budget_name}
+        userDetails={route.params.userDetails}
       />
       {arrowDirection.length > 0 ? (
         <TouchableOpacity

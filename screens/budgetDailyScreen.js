@@ -20,6 +20,7 @@ import { formatLastUpdatedTime } from "../components/resuableFunctions";
 import CustomButton from "../components/customButton";
 import { addNewExpenseItem } from "../db/apis/budget";
 import { formatDisplayAmount } from "../components/resuableFunctions";
+import { sendNotificationToUsers } from "../components/resuableFunctions";
 
 export default function DailyBudgetView({ route, navigation }) {
   const [expenseDetails, setExpenseDetails] = useState({
@@ -200,6 +201,15 @@ export default function DailyBudgetView({ route, navigation }) {
                           }
                         );
                         setNewDayAmt("0");
+                        let title = route.params.budget_name;
+
+                        let messageBody =
+                          route.params.userDetails.name +
+                          " added \u20B9" +
+                          newDayAmt +
+                          " to " +
+                          updateModalVisible.expenseName;
+
                         setUpdateModelVisible({
                           visible: false,
                           expenseName: "",
@@ -208,6 +218,12 @@ export default function DailyBudgetView({ route, navigation }) {
                         await updateDayExpenseDetails(
                           route.params.budget_id,
                           route.params.selectedDate
+                        );
+
+                        sendNotificationToUsers(
+                          route.params.users,
+                          title,
+                          messageBody
                         );
                         setIsLoading(false);
                       }
@@ -269,6 +285,9 @@ export default function DailyBudgetView({ route, navigation }) {
                 navigation.navigate("AddExpense", {
                   budgetId: expenseDetails.budgetId,
                   date: expenseDetails.selectedDate,
+                  users: route.params.users,
+                  budget_name: route.params.budget_name,
+                  userDetails: route.params.userDetails,
                 });
               }}
             >

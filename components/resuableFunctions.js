@@ -1,5 +1,8 @@
 import GetCompleteDate from "./getCompletDate";
 import { FormatAMPM } from "./getCompletDate";
+import * as Notifications from "expo-notifications";
+import { getUsersInBudget } from "../db/apis/budget";
+import { getUserDetails } from "../db/apis/user";
 
 export const formatLastUpdatedTime = (seconds) => {
   var lastUpDate = new Date(seconds * 1000);
@@ -36,4 +39,30 @@ export const formatDisplayAmount = (amount, limit) => {
   if (newAmount > 0) {
     return newAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + prefix;
   } else return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+export const sendNotificationToUsers = async (
+  usersList,
+  title,
+  messageBody
+) => {
+  for (let userId in usersList) {
+    let userDetailsDB = await getUserDetails(usersList[userId]);
+    const message = {
+      to: userDetailsDB["expoPushToken"],
+      sound: "default",
+      title: title,
+      body: messageBody,
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  }
 };

@@ -14,17 +14,10 @@ import { useIsFocused } from "@react-navigation/native";
 
 export default function Home({ route, navigation }) {
   const [budgetData, setBudgetData] = useState([]);
-  const [userDetails, setUserDetails] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [userId, setUserId] = useState(route.params.id);
   const isFocused = useIsFocused();
   const [refreshing, setRefreshing] = useState(false);
-
-  useEffect(async () => {
-    const userDetailsDB = await user.getUserDetails(userId);
-    console.log(userDetailsDB);
-    setUserDetails(userDetailsDB);
-  }, []);
 
   useEffect(async () => {
     setIsLoading(true);
@@ -33,7 +26,6 @@ export default function Home({ route, navigation }) {
     setIsLoading(false);
     return () => {
       setBudgetData();
-      setUserDetails();
       setIsLoading();
       setUserId();
       setRefreshing();
@@ -70,7 +62,9 @@ export default function Home({ route, navigation }) {
               padding: 10,
             }}
             onPress={() => {
-              navigation.navigate("Profile", { userDetails });
+              navigation.navigate("Profile", {
+                userDetails: route.params.userDetails,
+              });
             }}
           >
             <MyIcon name={"more-vertical"} size={25} color={"#000"} />
@@ -78,7 +72,7 @@ export default function Home({ route, navigation }) {
         </View>
       ),
     });
-  }, [userDetails]);
+  }, [route.params.userDetails]);
 
   return (
     <View style={Styles.container}>
@@ -93,7 +87,7 @@ export default function Home({ route, navigation }) {
               <BudgetItem
                 item={item}
                 navigation={navigation}
-                userDetails={userDetails}
+                userDetails={route.params.userDetails}
               />
             )}
             refreshControl={
@@ -113,7 +107,9 @@ export default function Home({ route, navigation }) {
             <TouchableOpacity
               activeOpacity={0.8}
               onPress={() => {
-                navigation.navigate("AddUsers");
+                navigation.navigate("AddUsers", {
+                  userDetails: route.params.userDetails,
+                });
               }}
             >
               <MyIcon name={"plus"} size={40} color={"#fff"} />

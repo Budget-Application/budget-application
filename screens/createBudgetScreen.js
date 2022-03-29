@@ -12,6 +12,8 @@ import {
 import { MyAntIcon } from "../components/addFabIcon";
 import { createNewBudgetGroup } from "../db/apis/util";
 import { auth } from "../db/setup";
+import { sendNotificationToUsers } from "../components/resuableFunctions";
+import { getUserDetails } from "../db/apis/user";
 
 export default function CreateBudgetScreen({ route, navigation }) {
   const [newBudget, setNewBudget] = useState("");
@@ -24,7 +26,11 @@ export default function CreateBudgetScreen({ route, navigation }) {
           title="Cancel"
           color={"#00f2aa"}
           onPress={() => {
-            navigation.goBack();
+            setNewBudget("");
+            setUsers([]);
+            navigation.navigate("AddUsers", {
+              userDetails: route.params.userDetails,
+            });
           }}
         />
       ),
@@ -43,13 +49,19 @@ export default function CreateBudgetScreen({ route, navigation }) {
                 userIds.push(user.id);
               });
               const response = await createNewBudgetGroup(newBudget, userIds);
+              const title = "New Budget Created";
+              let adminUser = route.params.userDetails;
+              let messageBody =
+                adminUser.name + " created Budget " + newBudget + "!!!";
               if (response) {
+                sendNotificationToUsers(userIds, title, messageBody);
                 Alert.alert("Request Successful", "Created budget group.", [
                   {
                     text: "OK",
                     onPress: () =>
                       navigation.replace("Home", {
                         id: auth.currentUser.uid,
+                        userDetails: route.params.userDetails,
                       }),
                   },
                 ]);
@@ -61,7 +73,11 @@ export default function CreateBudgetScreen({ route, navigation }) {
                     [
                       {
                         text: "OK",
-                        onPress: () => navigation.goBack(),
+                        onPress: () => {
+                          setNewBudget("");
+                          setUsers([]);
+                          navigation.goBack();
+                        },
                       },
                     ]
                   );

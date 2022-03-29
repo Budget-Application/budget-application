@@ -59,7 +59,10 @@ export default function AddUsersScreen({ route, navigation }) {
     const data = contacts.filter((item) => {
       return members.includes(item.id);
     });
-    navigation.navigate("CreateBudget", { data });
+    navigation.navigate("CreateBudget", {
+      data: data,
+      userDetails: route.params.userDetails,
+    });
   };
 
   return (

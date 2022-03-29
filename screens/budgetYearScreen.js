@@ -173,6 +173,9 @@ export default function YearView({ route, navigation }) {
                       selectedYear: expenseDetails.selectedYear,
                       selectedMonth: item,
                       budget_id: route.params.budget_id,
+                      users: route.params.users,
+                      budget_name: route.params.budget_name,
+                      userDetails: route.params.userDetails,
                     })
                   }
                 >
