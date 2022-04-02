@@ -1,16 +1,8 @@
-App.js calls to create Stack Navigator.
-|- Stack Navigator contains "Home","BudgetScreen"
 
-home.js uses FlatList to show the budgets name.
-|-FlatList items are budgetItem from components
+# Apna Budget
 
-budgetScreen.js show calendar view (from components) of selected budget
-|- Drawer Navigation is used- "yearView", "monthView"(Default), "dayView"
+## Screens:
+|1. App Loading Screen|2. Login Screen Phone|3. Enter OTP Screen| 4. Enter User Details Screen
+| :---: | :---: | :---: | :---: |
+|<img src=".\ScreenShots\1. App Loading Screen.jpg" width="100">|<img src=".\ScreenShots\2. Login Screen Phone.jpg" width="100">|<img src=".\ScreenShots\3. Enter OTP Screen.jpg" width="100">|<img src=".\ScreenShots\4. Enter User Details Screen.jpg" width="100">|
 
-Test Cases: 
-    1. Font Size dynamic based on height and width of screen.
-    3. Sckeleton Animation on loading in all screens.
-
-LookUp:
-    Margin Value to percentage.
-    Padding Value to percentage.
