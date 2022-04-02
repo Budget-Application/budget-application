@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "my-project",
-    "slug": "my-project",
+    "name": "Apna Budget",
+    "slug": "apnabudget",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -32,6 +32,9 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.mma.apnabudget",
+      "versionCode": 1,
+      "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
