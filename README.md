@@ -1,6 +1,11 @@
 
 # Apna Budget
 
+## Tech Stack:
+* **Frontend UI:** &nbsp;&nbsp;&nbsp;&nbsp; React Native
+* **Backend API's:** &nbsp; Google Firebase
+* **DataBase:** &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Google Firestore DB
+
 ## Screens:
 |1. App Loading Screen|2. Login Screen Phone|3. Enter OTP Screen| 4. Enter User Details Screen
 | :---: | :---: | :---: | :---: |
