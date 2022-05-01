@@ -6,6 +6,7 @@ import {
   runTransaction,
   serverTimestamp,
   setDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { db } from "../setup.js";
 
@@ -57,6 +58,22 @@ export const getDocuments = async (collectionPath) => {
       `Error getting documents from collection: ${collectionPath} `,
       e
     );
+  }
+};
+
+/**
+ * Function to update document
+ * @param {String} documentPath - The path of the document to set data
+ * @param {Object} properties - The properties to add to the document, e.g: `{key1: value1, key2: value2}`
+ * @returns true/false
+ */
+export const updateDocument = async (documentPath, properties) => {
+  try {
+    await updateDoc(doc(db, documentPath), properties);
+    return true;
+  } catch (e) {
+    console.error(`Error updating document: ${documentPath}`, e);
+    return false;
   }
 };
 
@@ -156,6 +173,7 @@ export const createNewBudgetGroup = async (budgetName, userIds) => {
         budget_total: 0,
         last_updated_time: serverTimestamp(),
         users: userIds,
+        expense_names: [],
       });
       userRefs.forEach((userRef) => {
         transaction.set(userRef, { ref: budgetRef }, { merge: true });

@@ -22,16 +22,20 @@ export default function AddUsersScreen({ route, navigation }) {
 
   useEffect(async () => {
     const { status } = await Contacts.requestPermissionsAsync();
-
+    let uniquePhoneNumbers = new Set();
     if (status === "granted") {
       let { data } = await Contacts.getContactsAsync({
         fields: [Contacts.Fields.PhoneNumbers],
       });
+
       const phoneToUserMap = await getPhoneNumberToUserMap();
       data = data.filter((item) => {
         if (item.phoneNumbers && item.phoneNumbers[0]) {
-          const phoneNumber = formatPhoneNumber(item.phoneNumbers[0].number);
-          return phoneNumber in phoneToUserMap;
+          let phoneNumber = formatPhoneNumber(item.phoneNumbers[0].number);
+          if (!uniquePhoneNumbers.has(phoneNumber)) {
+            uniquePhoneNumbers.add(phoneNumber);
+            return phoneNumber in phoneToUserMap;
+          }
         }
         return false;
       });

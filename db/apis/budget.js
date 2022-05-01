@@ -1,4 +1,5 @@
 import * as db from "./util.js";
+import { arrayUnion } from "firebase/firestore";
 
 /**
  * Function to get expense details from a budget for a given month
@@ -44,6 +45,16 @@ export const getExpenseNames = async (budgetId) => {
   const budgetDetails = await db.getDocument(`budgets/${budgetId}`);
   const expenseNames = budgetDetails["expense_names"];
   return expenseNames;
+};
+
+/**
+ * Function to set expense names from a budget
+ * @param {String} budgetId - The budgetId to get expenseNames
+ */
+export const addExpenseName = async (budgetId, expenseName) => {
+  return await db.updateDocument(`budgets/${budgetId}`, {
+    expense_names: arrayUnion(expenseName),
+  });
 };
 
 /**
