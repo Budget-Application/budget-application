@@ -86,6 +86,7 @@ export default function BudgetDrawer({ route, navigation }) {
           drawerIcon: ({ color }) => (
             <MyAntIcon name={"calendar"} size={20} color={color} />
           ),
+          headerRightContainerStyle: { paddingRight: 20 },
         }}
       />
       <Drawer.Screen

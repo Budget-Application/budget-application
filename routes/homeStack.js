@@ -8,6 +8,7 @@ import LoginScreen from "../screens/userAuthScreens/LoginScreen";
 import UserDetails from "../screens/userAuthScreens/UserDetails";
 import CreateBudgetScreen from "../screens/createBudgetScreen";
 import AddUsersScreen from "../screens/addUsersScreen";
+import MonthlyReportScreen from "../screens/monthlyReportScreen";
 import * as user from "../db/apis/user.js";
 import { auth } from "../db/setup";
 
@@ -101,6 +102,13 @@ export default function CreateNavigationContainer() {
           }}
         />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen
+          name="MonthlyReportScreen"
+          component={MonthlyReportScreen}
+          options={{
+            title: "Report",
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import React, { useEffect, useState, useLayoutEffect } from "react";
+import { StyleSheet, View, TouchableOpacity, Text, Button } from "react-native";
 import BudgetCalendar from "../components/calenderView";
 import { useIsFocused } from "@react-navigation/native";
 import MyIcon from "../components/addFabIcon";
+import { getAllExpense } from "../db/apis/budget";
 
 const monthNames = {
   January: 0,
@@ -24,6 +25,7 @@ export default function BudgetMonthView({ route, navigation }) {
   const [state, setState] = useState({
     activeDate: currentDate,
   });
+  let monthlyReportData = {};
   const isFocused = useIsFocused();
   var arrowDirection = "";
   if (state.activeDate.getFullYear() > currentDate.getFullYear())
@@ -47,6 +49,25 @@ export default function BudgetMonthView({ route, navigation }) {
       setState();
     };
   }, [isFocused]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          title= "Report"
+          color={"#00f2aa"}
+          onPress={() => {
+            navigation.navigate("MonthlyReportScreen", {
+              budget_id: route.params.budget_id,
+              month: state.activeDate.getMonth(),
+              // monthlyData: monthlyReportData,
+              year: state.activeDate.getFullYear(),
+            });
+          }}
+        />
+      ),
+    });
+  }, [navigation, state]);
 
   return (
     <View style={style.container}>

@@ -38,6 +38,17 @@ export const getDailyExpense = async (budgetId, date) => {
 };
 
 /**
+ * Function to get all expense details from a budget
+ * @param {String} budgetId - The budgetId to get daily expense
+ */
+ export const getAllExpense = async (budgetId) => {
+  const AllExpense = await db.getDocuments(
+    `budgets/${budgetId}/daily_expenses`
+  );
+  return AllExpense ? AllExpense : { };
+};
+
+/**
  * Function to get expense names from a budget
  * @param {String} budgetId - The budgetId to get expenseNames
  */
